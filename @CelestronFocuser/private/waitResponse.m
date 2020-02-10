@@ -8,8 +8,9 @@
             retries=100;
             i=0; received=false;
             while i<retries && ~received
-                if F.Port.BytesAvailable>0
-                    buf=[buf,fread(F.Port,[1,F.Port.BytesAvailable],'char')];
+                if F.serial_resource.BytesAvailable>0
+                    buf=[buf,fread(F.serial_resource,...
+                           [1,F.serial_resource.BytesAvailable],'char')];
                     % parsing is a bit tricky: we we are good to go if we find in
                     % the input [src dest cmd], if two bytes before that is 0x3B,
                     % and if we have already len+1 other bites of it;
@@ -18,7 +19,7 @@
                     % the removal of the trailing message.
                     % Also, cmd may be the command waited for, if legal,
                     %  or UNRECOGNIZED_COMMAND otherwise
-                    pstart=regexp(buf,[';.' uint8([dest F.master])...
+                    pstart=regexp(buf,[';.' uint8([dest CelDev.APPL])...
                            '[' uint8([cmd,AUXcmd.UNRECOGNIZED_COMMAND]) ']']);
                     if ~isempty(pstart)
                         pend=pstart+buf(pstart+1)+2;

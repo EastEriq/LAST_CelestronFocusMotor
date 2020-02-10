@@ -27,15 +27,15 @@ function F=connect(F,Port)
                 if strcmp(F.serial_resource.status,'closed')
                     fopen(F.serial_resource);
                 end
-                F.Port=F.serial_resource.name;
+                F.Port=F.serial_resource.Port;
             catch
-                error(['Port ' F.serial_resource.name ' cannot be opened'])
+                error(['Port ' F.serial_resource.Port ' cannot be opened'])
             end
             set(F.serial_resource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
             % (quirk: write terminator has to be 10 so that 10 in output
             %  binary data is sent as such)
             if check_for_focuser(F)
-                F.report('a NexStar device was found on '+Port+'\n')
+                F.report("a NexStar device was found on "+Port+'\n')
             else
                 delete(instrfind('Port',Port))
                 F.report("no NexStar device found on "+Port+'\n')

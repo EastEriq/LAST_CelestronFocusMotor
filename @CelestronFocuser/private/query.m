@@ -2,7 +2,7 @@
             % Send a command and sit waiting for its reply
             % Dispose of previous traffic potentially having
             % filled the inbuffer, for an immediate response
-            flushinput(N.Port)
+            flushinput(N.serial_resource)
             % just reading all bytes sometimes is not enough
             %  when the buffer is full since a long time, the expected 
             %  reply gets lost anyway (don't know why)
