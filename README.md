@@ -1,4 +1,4 @@
-##Celestron Focus Motor driver for LAST
+## Celestron Focus Motor driver for LAST
 
 See the project where all this started from: [NexStarMatlab](https://github.com/EastEriq/NexStarMatlab).
 
