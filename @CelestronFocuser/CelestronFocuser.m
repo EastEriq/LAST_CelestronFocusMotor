@@ -7,6 +7,7 @@ classdef CelestronFocuser <handle
     properties (GetAccess=public, SetAccess=private)
         Status='unknown';
         LastPos=NaN;
+        limits=[NaN,NaN]
     end
     
     properties (Hidden=true)
