@@ -1,10 +1,15 @@
 function HasFocuser=check_for_focuser(F)
-% check if there is a focuser by querying its motion limits
+% check if there is a focuser by querying its version
+            HasFocuser=false;
             try
-                hexlimits=F.query(CelDev.FOCU,AUXcmd.GET_HS_POSITIONS);
-                FocuserLimits=[F.bytes2num(hexlimits.bindata(1:4)),...
-                                 F.bytes2num(hexlimits.bindata(5:8))];
-                HasFocuser=true;
+                resp=F.query(CelDev.FOCU,AUXcmd.GET_VER);
+                HasFocuser=resp.good;
             catch
-                HasFocuser=false;
+                
+            end
+            
+            if HasFocuser
+                F.report("a Celestron Focus Motor was found on "+F.Port+'\n')
+            else
+                F.report("no Celestron Focus Motor found on "+F.Port+'\n')
             end 
