@@ -9,6 +9,10 @@ classdef CelestronFocuser <handle
         LastPos=NaN;
     end
         
+    properties (SetAccess=public, GetAccess=private)
+        relPos=NaN;
+    end
+        
     properties (Hidden=true)
         Port="";
     end
@@ -65,6 +69,13 @@ classdef CelestronFocuser <handle
             end
         end
         
+        function set.relPos(F,incr)
+            p=F.Pos;
+            F.Pos=p+incr;
+             % (don't use F.Pos=F.Pos+incr, it will fail, likely for access
+             %  issues)
+        end
+        
         function limits=get.limits(F)
             try
                 hexlimits=F.query(CelDev.FOCU,AUXcmd.GET_HS_POSITIONS);
@@ -89,7 +100,11 @@ classdef CelestronFocuser <handle
                 if F.Pos~=p1
                     s='moving';
                 else
-                    s='idle';
+                    if reached
+                        s='idle';
+                    else
+                        s='stuck';
+                    end
                 end
             catch
             end

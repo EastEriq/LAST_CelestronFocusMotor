@@ -36,7 +36,7 @@ function F=connect(F,Port)
                 end
                 F.Port=F.serial_resource.Port;
             catch
-                F.lastError(['Port ' F.serial_resource.Port ' cannot be opened'])
+                F.lastError=['Port ' Port ' cannot be opened'];
             end
             set(F.serial_resource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
             % (quirk: write terminator has to be 10 so that 10 in output
