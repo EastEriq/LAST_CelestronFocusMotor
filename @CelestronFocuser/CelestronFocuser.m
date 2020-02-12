@@ -23,7 +23,7 @@ classdef CelestronFocuser <handle
         serial_resource % the serial object corresponding to Port
     end
     
-    properties (Hidden=true, GetAccess=public, SetAccess=private)
+    properties (Hidden=true, GetAccess=public, SetAccess=private, Transient)
         lastError='';
         limits=[NaN,NaN];
     end
@@ -61,7 +61,7 @@ classdef CelestronFocuser <handle
             else
                 try
                     F.LastPos=F.Pos; %this works
-                    F.send(CelDev.FOCU,AUXcmd.GOTO_FAST,F.num2bytes(focus,3));
+                    F.query(CelDev.FOCU,AUXcmd.GOTO_FAST,F.num2bytes(focus,3));
                     F.lastError=''; %this fails
                 catch
                     F.lastError='set new focus position failed';
@@ -91,6 +91,10 @@ classdef CelestronFocuser <handle
             %  for that. Moving can be determined by looking at position
             %  changes? What if the focuser is stuck? what if motion has
             %  been aborted?
+            % Note - the focuser response can be erratic, maybe because of
+            %  poor cables - I've seen the focuser start moving several
+            %  seconds after commanded, i.e. - this complicates guessing the
+            %  status
             s='unknown';
             try
                 p1=F.Pos;
@@ -107,6 +111,7 @@ classdef CelestronFocuser <handle
                     end
                 end
             catch
+                F.lastError='could not get status, communication problem?';
             end
         end
         
