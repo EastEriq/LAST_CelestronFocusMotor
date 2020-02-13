@@ -5,14 +5,16 @@ function calibrate(F)
 %  power supply, USB powering is not sufficient, the focuser may still move
 %  a bit slower, but the serial resource will continuously disconnect,
 %  and cause a mess because of resources left open and new USB enumerations
-%  created
+%  created.
+% Or to say it better: doesnt't matter, take for granted that the focuser
+% will disconnect itself, just reconnect it after a few minutes
     timeout=240;
     try
         stage=-1;
         start_t=now;
         F.send(CelDev.FOCU,AUXcmd.HS_CALIBRATION_ENABLE,1);
         % polling till completed:
-        while (stage~=256) || (now-start_t)*3600*24 < timeout
+        while (stage~=256) && (now-start_t)*3600*24 < timeout
             pause(1)
             resp=F.query(CelDev.FOCU,AUXcmd.IS_HS_CALIBRATED);
             if resp.good
