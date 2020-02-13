@@ -44,7 +44,7 @@ function F=connect(F,Port)
         F.Port=F.serial_resource.Port;
         check_for_focuser(F);
     catch
-        F.lastError=['Port ' Port ' cannot be opened'];
+        F.lastError="Port "+Port+' cannot be opened';
         delete(instrfind('Port',Port)) % (tcatch also error here?)
     end
     end
