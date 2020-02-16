@@ -56,6 +56,7 @@ classdef CelestronFocuser <handle
         end
         
         function set.Pos(F,focus)
+            % empirically, the moving rate seems to be ~300 steps/sec
             if focus<F.limits(1) ||  focus>F.limits(2)
                 F.lastError='Focuser commanded to move out of range!';
             else
@@ -92,7 +93,9 @@ classdef CelestronFocuser <handle
             %  changes? What if the focuser is stuck? what if motion has
             %  been aborted?
             % Note - the focuser response can be erratic, maybe because of
-            %  poor cables - I've seen the focuser start moving several
+            %  poor cables, more likely because of EMI or poor engineering
+            %  of the USB/serial communication module 
+            %  - I've seen the focuser start moving several
             %  seconds after commanded, i.e. - this complicates guessing the
             %  status
             s='unknown';
