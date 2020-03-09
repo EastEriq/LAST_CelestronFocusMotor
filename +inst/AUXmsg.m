@@ -15,15 +15,15 @@ classdef AUXmsg < handle
     methods %dummy constructor
         function msg=AUXmsg(src,dest,cmd,data)
             if exist('src','var')
-                msg.src=CelDev(src);
+                msg.src=inst.CelDev(src);
                 msg.len=1;
             end
             if exist('dest','var')
-                msg.dest=CelDev(dest);
+                msg.dest=inst.CelDev(dest);
                 msg.len=2;
             end
             if exist('cmd','var')
-                msg.cmd=AUXcmd(cmd);
+                msg.cmd=inst.AUXcmd(cmd);
                 msg.len=3;
             end
             if exist('data','var')
@@ -50,7 +50,7 @@ classdef AUXmsg < handle
             % an AUX packet should start with 59, contain the number of
             %  bytes specified, and end with the proper checksum
             %  But what if 59 is also part of the data?           
-            msg=AUXmsg;            
+            msg=inst.AUXmsg;            
             msg.time=now;
             msg.good=packet(1)==59;
             if msg.good
@@ -73,7 +73,7 @@ classdef AUXmsg < handle
                     msg.chksum=packet(end);
                     msg.chkok= msg.chksum==msg.checksum(packet);
                     % flag answers to illegal commands as bad messages 
-                    if msg.cmd==AUXcmd.UNRECOGNIZED_COMMAND
+                    if msg.cmd==inst.AUXcmd.UNRECOGNIZED_COMMAND
                         msg.good=false;
                     end
                     % msg.good= msg.good & msg.chkok;
@@ -91,21 +91,21 @@ classdef AUXmsg < handle
         
         function formatted=format(msg)
             % pretty-print an AUXmsg object
-            % mnemos are from CelDev and AUXcmd enumerators
+            % mnemos are from inst.CelDev and inst.AUXcmd enumerators
             try
-                srcname=string(CelDev(msg.src));
+                srcname=string(inst.CelDev(msg.src));
             catch
                 srcname=['B_' num2str(msg.src)];
             end
             
             try
-                destname=string(CelDev(msg.dest));
+                destname=string(inst.CelDev(msg.dest));
             catch
                 destname=['B_' num2str(msg.dest)];
             end
 
             try
-                cmdname=string(AUXcmd(msg.cmd));
+                cmdname=string(inst.AUXcmd(msg.cmd));
             catch
                 cmdname=['CMD_' num2str(msg.cmd)];
             end

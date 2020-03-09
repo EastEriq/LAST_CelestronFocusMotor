@@ -1,6 +1,6 @@
 function abort_calibrate(F)
     try
-        F.send(CelDev.FOCU,AUXcmd.HS_CALIBRATION_ENABLE,0);
+        F.send(inst.CelDev.FOCU,AUXcmd.HS_CALIBRATION_ENABLE,0);
         F.lastError='';
     catch
         rep='not able to abort calibration!';

@@ -3,7 +3,7 @@
             % pattern is found in the input serial stream, and
             % wastes anything else which arrives inbetween
             % note that we check for a response, i.e. invert src<->dest
-            out=AUXmsg();
+            out=inst.AUXmsg();
             buf='';
             retries=100;
             i=0; received=false;
@@ -19,12 +19,12 @@
                     % the removal of the trailing message.
                     % Also, cmd may be the command waited for, if legal,
                     %  or UNRECOGNIZED_COMMAND otherwise
-                    pstart=regexp(buf,[';.' uint8([dest CelDev.APPL])...
-                           '[' uint8([cmd,AUXcmd.UNRECOGNIZED_COMMAND]) ']']);
+                    pstart=regexp(buf,[';.' uint8([dest inst.CelDev.APPL])...
+                           '[' uint8([cmd,inst.AUXcmd.UNRECOGNIZED_COMMAND]) ']']);
                     if ~isempty(pstart)
                         pend=pstart+buf(pstart+1)+2;
                         if numel(buf) >= pend
-                            out=AUXmsg.check(buf(pstart:pend));
+                            out=inst.AUXmsg.check(buf(pstart:pend));
                             received=true;
                         end
                     end

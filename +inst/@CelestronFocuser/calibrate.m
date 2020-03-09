@@ -11,12 +11,12 @@ function calibrate(F)
     try
         stage=-1;
         start_t=now; t=0;
-        F.send(CelDev.FOCU,AUXcmd.HS_CALIBRATION_ENABLE,1);
+        F.send(inst.CelDev.FOCU,inst.AUXcmd.HS_CALIBRATION_ENABLE,1);
         % polling till completed:
         while (stage~=256) && t < timeout
             pause(1)
             t=(now-start_t)*3600*24;
-            resp=F.query(CelDev.FOCU,AUXcmd.IS_HS_CALIBRATED);
+            resp=F.query(inst.CelDev.FOCU,inst.AUXcmd.IS_HS_CALIBRATED);
             if resp.good
                 stage=resp.numdata;
             end

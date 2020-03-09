@@ -46,7 +46,7 @@ classdef CelestronFocuser <handle
         %getters and setters
         function focus=get.Pos(F)
             try
-                resp=F.query(CelDev.FOCU,AUXcmd.GET_POSITION);
+                resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_POSITION);
                 focus=resp.numdata;
                 F.lastError='';
             catch
@@ -62,7 +62,7 @@ classdef CelestronFocuser <handle
             else
                 try
                     F.LastPos=F.Pos; %this works
-                    F.query(CelDev.FOCU,AUXcmd.GOTO_FAST,F.num2bytes(focus,3));
+                    F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
                     F.lastError=''; %this fails
                 catch
                     F.lastError='set new focus position failed';
@@ -79,7 +79,7 @@ classdef CelestronFocuser <handle
         
         function limits=get.limits(F)
             try
-                hexlimits=F.query(CelDev.FOCU,AUXcmd.GET_HS_POSITIONS);
+                hexlimits=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_HS_POSITIONS);
                 limits=[F.bytes2num(hexlimits.bindata(1:4)),...
                         F.bytes2num(hexlimits.bindata(5:8))];
             catch
@@ -101,7 +101,7 @@ classdef CelestronFocuser <handle
             s='unknown';
             try
                 p1=F.Pos;
-                resp=F.query(CelDev.FOCU,AUXcmd.IS_GOTO_OVER);
+                resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.IS_GOTO_OVER);
                 reached=(resp.bindata==255);
                 pause(0.1)
                 if F.Pos~=p1

@@ -2,7 +2,7 @@ function HasFocuser=check_for_focuser(F)
 % check if there is a focuser by querying its version
             HasFocuser=false;
             try
-                resp=F.query(CelDev.FOCU,AUXcmd.GET_VER);
+                resp=F.query(inst.CelDev.FOCU,inst.AUXcmd.GET_VER);
                 HasFocuser=resp.good;
                 F.lastError='';
             catch

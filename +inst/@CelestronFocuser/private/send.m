@@ -1,12 +1,12 @@
         function send(F,dest,cmd,data) % Send Command
-            % Stream and send the command, object of class AUXmsg
+            % Stream and send the command, object of class inst.AUXmsg
             % The relevant communication port is supposed to have been
             % opened regularly
             if exist('data','var')
-                msg=AUXmsg(CelDev.APPL,dest,cmd,data);
+                msg=inst.AUXmsg(inst.CelDev.APPL,dest,cmd,data);
             else
-                msg=AUXmsg(CelDev.APPL,dest,cmd);
+                msg=inst.AUXmsg(inst.CelDev.APPL,dest,cmd);
             end
-            % fprintf(' %02X',AUXmsg.stream(msg)); fprintf('\n')
-            fprintf(F.serial_resource,char(AUXmsg.stream(msg)));
+            % fprintf(' %02X',inst.AUXmsg.stream(msg)); fprintf('\n')
+            fprintf(F.serial_resource,char(inst.AUXmsg.stream(msg)));
         end
