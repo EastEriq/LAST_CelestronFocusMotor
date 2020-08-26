@@ -8,6 +8,8 @@ function calibrate(F)
 % Or to say it better: doesnt't matter, take for granted that the focuser
 % will disconnect itself, just reconnect it after a few minutes.
     timeout=240;
+    stuckreadings=4;
+    lastpos=nan(1,stuckreadings);
     try
         stage=-1;
         start_t=now; t=0;
@@ -20,7 +22,14 @@ function calibrate(F)
             if resp.good
                 stage=resp.numdata;
             end
-            F.report(sprintf('... t=%.1f, calibration stage %d, f=%d\n',t,stage,F.Pos))
+            lastpos(1:end-1)=lastpos(2:end);
+            lastpos(end)=F.Pos;
+            F.report(sprintf('... t=%.1f, calibration stage %d, f=%d\n',t,stage,lastpos(end)))
+            if all(lastpos==lastpos(end))
+                F.report('Focuser stuck!')
+                F.lastError='Focuser stuck during calibration!';
+                break
+            end
         end
         if stage==256
             F.report('Calibration completed!\n')

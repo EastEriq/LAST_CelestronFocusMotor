@@ -3,6 +3,8 @@
             
             % check if the serial port is still reachable first.
             % Disconnections are so frequent
+            % (consider whether it is worth to protect this way also
+            %  send() and waitResponse())
             if ~isPortAvailable(N)
                 % ask David which kind of error reporting we expect at
                 %  abstraction level: error, F.lastError, stdout, what?
