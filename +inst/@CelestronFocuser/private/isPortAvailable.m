@@ -13,6 +13,6 @@ function avail=isPortAvailable(F)
         try
             delete(instrfind('Port',F.Port))
         catch
-            F.lastError=['cannot delete Port object ' F.Port ' -maybe OS disconnected it?'];
+            F.LastError=['cannot delete Port object ' F.Port ' -maybe OS disconnected it?'];
         end
     end

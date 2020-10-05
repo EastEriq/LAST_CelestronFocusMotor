@@ -8,5 +8,5 @@
                 msg=inst.AUXmsg(inst.CelDev.APPL,dest,cmd);
             end
             % fprintf(' %02X',inst.AUXmsg.stream(msg)); fprintf('\n')
-            fprintf(F.serial_resource,char(inst.AUXmsg.stream(msg)));
+            fprintf(F.SerialResource,char(inst.AUXmsg.stream(msg)));
         end

@@ -4,14 +4,14 @@ function HasFocuser=check_for_focuser(F)
             try
                 resp=F.query(inst.CelDev.FOCU,inst.AUXcmd.GET_VER);
                 HasFocuser=resp.good;
-                F.lastError='';
+                F.LastError='';
             catch
-                F.lastError=['not able to check for Focus Motor on ' F.Port];                
+                F.LastError=['not able to check for Focus Motor on ' F.Port];                
             end
             
             if HasFocuser
                 F.report("a Celestron Focus Motor was found on "+F.Port+'\n')
             else
                 F.report("no Celestron Focus Motor found on "+F.Port+'\n')
-                F.lastError=['no Celestron Focus Motor found on ' F.Port];                
+                F.LastError=['no Celestron Focus Motor found on ' F.Port];                
             end 

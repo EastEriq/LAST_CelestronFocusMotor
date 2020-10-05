@@ -8,9 +8,9 @@
             retries=100;
             i=0; received=false;
             while i<retries && ~received
-                if F.serial_resource.BytesAvailable>0
-                    buf=[buf,fread(F.serial_resource,...
-                           [1,F.serial_resource.BytesAvailable],'char')];
+                if F.SerialResource.BytesAvailable>0
+                    buf=[buf,fread(F.SerialResource,...
+                           [1,F.SerialResource.BytesAvailable],'char')];
                     % parsing is a bit tricky: we we are good to go if we find in
                     % the input [src dest cmd], if two bytes before that is 0x3B,
                     % and if we have already len+1 other bites of it;

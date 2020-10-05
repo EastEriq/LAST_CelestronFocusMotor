@@ -27,20 +27,20 @@ function calibrate(F)
             F.report(sprintf('... t=%.1f, calibration stage %d, f=%d\n',t,stage,lastpos(end)))
             if all(lastpos==lastpos(end))
                 F.report('Focuser stuck!')
-                F.lastError='Focuser stuck during calibration!';
+                F.LastError='Focuser stuck during calibration!';
                 break
             end
         end
         if stage==256
             F.report('Calibration completed!\n')
-            F.lastError='';
+            F.LastError='';
         else
             F.report('Calibration timed out!\n')
-            F.lastError='Calibration timed out!';
+            F.LastError='Calibration timed out!';
         end
     catch
         rep=sprintf('Calibration failed at stage %d after %fsec',stage,t);
         F.report([rep,'\n'])
-        F.lastError=rep;
+        F.LastError=rep;
     end
 end

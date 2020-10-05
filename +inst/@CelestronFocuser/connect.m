@@ -8,7 +8,7 @@ function F=connect(F,Port)
                 %  possible serial port. Pity we cannot
                 %  look for a named (i.e. SN) unit
                 F.connect(Port);
-                if isempty(F.lastError)
+                if isempty(F.LastError)
                     return
                 else
                     delete(instrfind('Port',Port))
@@ -22,29 +22,29 @@ function F=connect(F,Port)
     try
         delete(instrfind('Port',Port))
     catch
-        F.lastError=['cannot delete Port object ' Port ' -maybe OS disconnected it?'];
+        F.LastError=['cannot delete Port object ' Port ' -maybe OS disconnected it?'];
     end
 
     try
-        F.serial_resource=serial(Port);
+        F.SerialResource=serial(Port);
         % serial has been deprecated in 2019b in favour of
         %  serialport... all communication code should be
         %  transitioned...
     catch
-        F.lastError=['cannot create Port object ' Port ];
+        F.LastError=['cannot create Port object ' Port ];
     end
 
     try
-        if strcmp(F.serial_resource.status,'closed')
-            fopen(F.serial_resource);
-            set(F.serial_resource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
+        if strcmp(F.SerialResource.status,'closed')
+            fopen(F.SerialResource);
+            set(F.SerialResource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
             % (quirk: write terminator has to be 10 so that 10 in output
             %  binary data is sent as such)
         end
-        F.Port=F.serial_resource.Port;
+        F.Port=F.SerialResource.Port;
         check_for_focuser(F);
     catch
-        F.lastError="Port "+Port+' cannot be opened';
+        F.LastError="Port "+Port+' cannot be opened';
         delete(instrfind('Port',Port)) % (tcatch also error here?)
     end
     end

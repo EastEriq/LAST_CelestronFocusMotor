@@ -7,12 +7,12 @@
             %  send() and waitResponse())
             if ~isPortAvailable(N)
                 % ask David which kind of error reporting we expect at
-                %  abstraction level: error, F.lastError, stdout, what?
+                %  abstraction level: error, F.LastError, stdout, what?
                 error(['Port ' N.Port 'disappeared'])
             else
                 % Dispose of previous traffic potentially having
                 % filled the inbuffer, for an immediate response
-                flushinput(N.serial_resource)
+                flushinput(N.SerialResource)
                 % just reading all bytes sometimes is not enough
                 %  when the buffer is full since a long time, the expected
                 %  reply gets lost anyway (don't know why)

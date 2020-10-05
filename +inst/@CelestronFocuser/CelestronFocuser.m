@@ -21,12 +21,12 @@ classdef CelestronFocuser <handle
     % non-API-demanded properties, Enrico's judgement
     properties (Hidden=true) 
         verbose=true; % for stdin debugging
-        serial_resource % the serial object corresponding to Port
+        SerialResource % the serial object corresponding to Port
     end
     
     properties (Hidden=true, GetAccess=public, SetAccess=private, Transient)
-        lastError='';
-        limits=[NaN,NaN];
+        LastError='';
+        Limits=[NaN,NaN];
     end
 
     
@@ -37,7 +37,7 @@ classdef CelestronFocuser <handle
         end
         
         function delete(F)
-            delete(F.serial_resource)
+            delete(F.SerialResource)
             % shall we try-catch and report success/failure?
         end
 
@@ -49,24 +49,24 @@ classdef CelestronFocuser <handle
             try
                 resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_POSITION);
                 focus=resp.numdata;
-                F.lastError='';
+                F.LastError='';
             catch
                 focus=NaN;
-                F.lastError='could not read focuser position';
+                F.LastError='could not read focuser position';
             end
         end
         
         function set.Pos(F,focus)
             % empirically, the moving rate seems to be ~300 steps/sec
-            if focus<F.limits(1) ||  focus>F.limits(2)
-                F.lastError='Focuser commanded to move out of range!';
+            if focus<F.Limits(1) ||  focus>F.Limits(2)
+                F.LastError='Focuser commanded to move out of range!';
             else
                 try
                     F.LastPos=F.Pos; %this works
                     F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
-                    F.lastError=''; %this fails
+                    F.LastError=''; %this fails
                 catch
-                    F.lastError='set new focus position failed';
+                    F.LastError='set new focus position failed';
                 end
             end
         end
@@ -78,13 +78,13 @@ classdef CelestronFocuser <handle
              %  issues)
         end
         
-        function limits=get.limits(F)
+        function Limits=get.Limits(F)
             try
                 hexlimits=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_HS_POSITIONS);
-                limits=[F.bytes2num(hexlimits.bindata(1:4)),...
+                Limits=[F.bytes2num(hexlimits.bindata(1:4)),...
                         F.bytes2num(hexlimits.bindata(5:8))];
             catch
-                limits=[NaN,NaN];
+                Limits=[NaN,NaN];
             end
         end
         
@@ -115,7 +115,7 @@ classdef CelestronFocuser <handle
                     end
                 end
             catch
-                F.lastError='could not get status, communication problem?';
+                F.LastError='could not get status, communication problem?';
             end
         end
         
