@@ -1,4 +1,4 @@
-classdef CelestronFocuser < LAST_Handle
+classdef CelestronFocuser < obs.LAST_Handle
     
     properties
         Pos=NaN;
