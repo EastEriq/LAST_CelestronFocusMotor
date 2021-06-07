@@ -1,4 +1,4 @@
-classdef CelestronFocuser <handle
+classdef CelestronFocuser < LAST_Handle
     
     properties
         Pos=NaN;
@@ -20,12 +20,10 @@ classdef CelestronFocuser <handle
 
     % non-API-demanded properties, Enrico's judgement
     properties (Hidden=true) 
-        verbose=true; % for stdin debugging
         SerialResource % the serial object corresponding to Port
     end
     
     properties (Hidden=true, GetAccess=public, SetAccess=private, Transient)
-        LastError='';
         Limits=[NaN,NaN];
     end
 
