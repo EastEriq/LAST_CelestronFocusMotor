@@ -18,3 +18,18 @@ focus strides, or in calibration. It may be for a large part
 a matter of weak engineering of the communication module and non-immunity to EMI too. Disconnects and OS reconnects are
 easily monitored by `dmesg -wH`; they cause the OS assigning a new `/dev/tty` device each time, are problematic for Matlab as they leave stale serial resources, and in general for stable operation. One may be forced to issue again and again `delete(instrfind)` to release ALL open
 resources and scan again all existing serial devices to find the one the focuser reattached to.
+
+## other notes on the focuser itself:
+
+- The focuser remembers its last position and its calibration limits at poweroff.
+- Calibration is performed by searching for the lower point of high resistance (high
+  drain current, probably) first. Then this is set as zero of the index, and the motor searches
+  the upper high resistance point. Once these two points are found, the operating range is set as
+  some hundred steps narrower than the points found (I have not understood whether by a fixed number or
+  by two current thresholds), and the motor is brought somewhere mid range.
+- the motor runs at ~400steps/second. 1000 steps are a full turn. Increasing counts mean CCW rotation.
+- On the RASA telecope, 1 turn equals 1mm. CCW rotation pushes inside the mirror, i.e toward the corrector
+  plate, i.e. it focuses the telecsope farther.
+- the focuser is not made for working when stuck. Among the rest the overcurrent probably causes a voltage drop
+  also on the communication circuits, which cause USB-serial drops and disconnects.
+- forcing the motor to turn when powered, using a wrench, causes permanent damage to the gearbox.
