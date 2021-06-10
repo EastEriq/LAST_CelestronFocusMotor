@@ -28,8 +28,10 @@ resources and scan again all existing serial devices to find the one the focuser
   some hundred steps narrower than the points found (I have not understood whether by a fixed number or
   by two current thresholds), and the motor is brought somewhere mid range.
 - the motor runs at ~400steps/second. 1000 steps are a full turn. Increasing counts mean CCW rotation.
+- The step counter wraps around at 60000 (not 2^16). This is seen When attempting calibration of a
+  mechanically disconnected from focus screw.
 - On the RASA telecope, 1 turn equals 1mm. CCW rotation pushes inside the mirror, i.e toward the corrector
-  plate, i.e. it focuses the telecsope farther.
+  plate, i.e. it focuses the telecsope farther. The total range is seen to be ~35000 steps.
 - the focuser is not made for working when stuck. Among the rest the overcurrent probably causes a voltage drop
   also on the communication circuits, which cause USB-serial drops and disconnects.
 - forcing the motor to turn when powered, using a wrench, causes permanent damage to the gearbox.
