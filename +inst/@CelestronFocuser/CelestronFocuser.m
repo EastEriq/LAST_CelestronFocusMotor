@@ -30,7 +30,7 @@ classdef CelestronFocuser < obs.LAST_Handle
     
     methods
         % constructor and destructor
-        function F=CelestronFocuser()
+        function F=CelestronFocuser(id)
             % does nothing, connecting to port in a separate method
         end
         
