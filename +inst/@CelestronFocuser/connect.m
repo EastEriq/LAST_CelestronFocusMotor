@@ -1,7 +1,11 @@
 function F=connect(F,Port)
-% connect to a focus motor on the specified Port, try all ports if
-%  Port omitted
-    if ~exist('Port','var') || isempty(Port)
+% connect to a focus motor on the specified Port. Port can be the name of a
+% serial resource (e.g. '/dev/ttyACM0') or a physical PCI address
+% (e.g 'pci-0000:00:14.0-usb-0:8:1.0')
+% All serial ports are tested if Port is omitted.
+
+% PhysicalAddress is a property of the superclass obs.focuser
+    if (~exist('Port','var') || isempty(Port)) && isempty(F.PhysicalAddress)
         for Port=seriallist
             try
                 % look for one NexStar device on every
@@ -14,15 +18,23 @@ function F=connect(F,Port)
                     delete(instrfind('Port',Port))
                 end
             catch
-                F.report("no Celestron Focus Motor found on "+Port+'\n')
+                F.report(['no Celestron Focus Motor found on ' Port '\n'])
             end
         end
     end
 
+    if ~exist('Port','var') && ~isempty('F.PhysicalAddress')
+        Port=idpath_to_port('F.PhysicalAddress');
+    end
+    
+    if isPCIusb(string(Port))
+        Port=idpath_to_port(string(Port));
+    end
+    
     try
         delete(instrfind('Port',Port))
     catch
-        F.LastError=['cannot delete Port object ' Port ' -maybe OS disconnected it?'];
+        F.reportError(['cannot delete Port object ' Port ' -maybe OS disconnected it?']);
     end
 
     try
@@ -31,7 +43,7 @@ function F=connect(F,Port)
         %  serialport... all communication code should be
         %  transitioned...
     catch
-        F.LastError=['cannot create Port object ' Port ];
+        F.reportError(['cannot create Port object ' Port ]);
     end
 
     try
@@ -44,7 +56,7 @@ function F=connect(F,Port)
         F.Port=F.SerialResource.Port;
         check_for_focuser(F);
     catch
-        F.LastError="Port "+Port+' cannot be opened';
-        delete(instrfind('Port',Port)) % (tcatch also error here?)
+        F.reportError(['Port "' Port '" cannot be opened']);
+        delete(instrfind('Port',Port)) % (catch also error here?)
     end
-    end
+end

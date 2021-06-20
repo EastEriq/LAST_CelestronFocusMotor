@@ -1,7 +1,7 @@
 classdef CelestronFocuser < obs.focuser
     
     properties
-        Pos double NaN;
+        Pos double =NaN;
     end
     
     properties (GetAccess=public, SetAccess=private)
@@ -31,6 +31,8 @@ classdef CelestronFocuser < obs.focuser
     methods
         % constructor and destructor
         function F=CelestronFocuser(id)
+            % call the parent constructor
+            F=F@obs.focuser(id);
             % does nothing, connecting to port in a separate method
         end
         
