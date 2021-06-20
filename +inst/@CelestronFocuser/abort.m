@@ -4,6 +4,6 @@ function abort(F)
         F.send(inst.CelDev.FOCU, inst.AUXcmd.MOVE_POS,0)
         F.LastError='';
     catch
-        F.LastError='could not abort motion, communication problem?';
+        F.reportError('could not abort motion, communication problem?');
     end
 end

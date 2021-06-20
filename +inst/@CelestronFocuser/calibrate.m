@@ -7,7 +7,7 @@ function calibrate(F)
 % assigned USB resource.
 % Or to say it better: doesnt't matter, take for granted that the focuser
 % will disconnect itself, just reconnect it after a few minutes.
-    timeout=240;
+    timeout=270;
     stuckreadings=4;
     lastpos=nan(1,stuckreadings);
     try
@@ -27,7 +27,7 @@ function calibrate(F)
             F.report(sprintf('... t=%.1f, calibration stage %d, f=%d\n',t,stage,lastpos(end)))
             if all(lastpos==lastpos(end))
                 F.report('Focuser stuck!')
-                F.LastError='Focuser stuck during calibration!';
+                F.reportError('Focuser stuck during calibration!');
                 break
             end
         end
@@ -36,11 +36,9 @@ function calibrate(F)
             F.LastError='';
         else
             F.report('Calibration timed out!\n')
-            F.LastError='Calibration timed out!';
+            F.reportError('Calibration timed out!');
         end
     catch
-        rep=sprintf('Calibration failed at stage %d after %fsec',stage,t);
-        F.report([rep,'\n'])
-        F.LastError=rep;
+        F.reportError(sprintf('Calibration failed at stage %d after %fsec',stage,t));
     end
 end
