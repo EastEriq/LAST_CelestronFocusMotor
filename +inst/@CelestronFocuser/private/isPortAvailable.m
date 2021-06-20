@@ -9,10 +9,11 @@ function avail=isPortAvailable(F)
     
     avail=any(contains(portlist,F.Port));
     if ~avail
-        F.report("Serial "+F.Port+' disappeared from system, closing it\n')
+        F.reportError("Serial "+F.Port+' disappeared from system, closing it')
         try
             delete(instrfind('Port',F.Port))
         catch
-            F.LastError=['cannot delete Port object ' F.Port ' -maybe OS disconnected it?'];
+            F.reportError=(['cannot delete Port object ' F.Port ...
+                            ' -maybe OS disconnected it?']);
         end
     end
