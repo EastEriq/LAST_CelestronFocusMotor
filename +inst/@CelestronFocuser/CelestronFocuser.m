@@ -1,13 +1,13 @@
 classdef CelestronFocuser < obs.focuser
     
     properties
-        Pos=NaN;
+        Pos double NaN;
     end
     
     properties (GetAccess=public, SetAccess=private)
-        Status='unknown';
-        LastPos=NaN;
-        FocType = 'Celestron Focus Motor'; 
+        Status char    = 'unknown';
+        LastPos double = NaN;
+        FocuserType = 'Celestron Focus Motor'; 
     end
         
     properties (SetAccess=public, GetAccess=private)
@@ -44,6 +44,9 @@ classdef CelestronFocuser < obs.focuser
     methods 
         %getters and setters
         function focus=get.Pos(F)
+            % former abstractor code had here a check IsConnected, and
+            %  attempted to reconnect - I think such remediations should be
+            %  left out of the elementary getters
             try
                 resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_POSITION);
                 focus=resp.numdata;
@@ -63,6 +66,8 @@ classdef CelestronFocuser < obs.focuser
                     F.LastPos=F.Pos; %this works
                     F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
                     F.LastError=''; %this fails
+                    % former abstractor code was arming here a timer for
+                    %  polling focuser status till destination reached
                 catch
                     F.LastError='set new focus position failed';
                 end
