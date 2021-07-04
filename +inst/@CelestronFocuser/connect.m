@@ -23,8 +23,8 @@ function F=connect(F,Port)
         end
     end
 
-    if ~exist('Port','var') && ~isempty('F.PhysicalAddress')
-        Port=idpath_to_port('F.PhysicalAddress');
+    if ~exist('Port','var') && ~isempty(F.PhysicalAddress)
+        Port=idpath_to_port(F.PhysicalAddress);
     end
     
     if isPCIusb(string(Port))
