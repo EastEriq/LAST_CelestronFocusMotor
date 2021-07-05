@@ -54,7 +54,9 @@ function F=connect(F,Port)
             %  binary data is sent as such)
         end
         F.Port=F.SerialResource.Port;
-        check_for_focuser(F);
+        if check_for_focuser(F)
+            F.PhysicalId=F.PhysicalAddress;
+        end
     catch
         F.reportError(['Port "' Port '" cannot be opened']);
         delete(instrfind('Port',Port)) % (catch also error here?)
