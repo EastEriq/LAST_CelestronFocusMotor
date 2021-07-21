@@ -34,7 +34,7 @@ function F=connect(F,Port)
     try
         delete(instrfind('Port',Port))
     catch
-        F.reportError(['cannot delete Port object ' Port ' -maybe OS disconnected it?']);
+        F.reportError(['cannot delete Celestron Focus Motor Port object ' Port ' -maybe OS disconnected it?']);
     end
 
     try
@@ -43,7 +43,7 @@ function F=connect(F,Port)
         %  serialport... all communication code should be
         %  transitioned...
     catch
-        F.reportError(['cannot create Port object ' Port ]);
+        F.reportError(['cannot create Port object ' Port ' for Celestron Focus Motor']);
     end
 
     try
@@ -58,7 +58,7 @@ function F=connect(F,Port)
             F.PhysicalId=F.PhysicalAddress;
         end
     catch
-        F.reportError(['Port "' Port '" cannot be opened']);
+        F.reportError(['Port "' Port '" for Celestron Focus Motor cannot be opened']);
         delete(instrfind('Port',Port)) % (catch also error here?)
     end
 end
