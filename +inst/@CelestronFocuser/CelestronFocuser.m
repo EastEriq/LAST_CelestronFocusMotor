@@ -63,8 +63,8 @@ classdef CelestronFocuser < obs.focuser
         function set.Pos(F,focus)
             % empirically, the moving rate seems to be ~300 steps/sec
             if focus<F.Limits(1) || focus>F.Limits(2)
-                F.reportError(sprintf(['Focuser %s commanded to move to %d', ...
-                                       ' out of its range [%d,%d]!'], focus,F.Id,F.Limits));
+                F.reportError(sprintf(['Focuser %s commanded to move to %d,', ...
+                                       ' out of its range [%d,%d]!'], F.Id,focus,F.Limits));
             else
                 try
                     F.LastPos=F.Pos; %this works
