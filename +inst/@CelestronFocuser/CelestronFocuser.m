@@ -123,7 +123,7 @@ classdef CelestronFocuser < obs.focuser
                 end
             catch
                 F.reportError(sprintf(['could not get focuser %s status,',...
-                                       ' communication problem?',F.Id));
+                                       ' communication problem?'],F.Id));
             end
         end
         
