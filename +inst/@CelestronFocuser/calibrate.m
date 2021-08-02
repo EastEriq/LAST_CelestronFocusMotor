@@ -34,6 +34,7 @@ function calibrate(F)
         if stage==256
             F.report('Calibration completed!\n')
             F.LastError='';
+            F.TargetPos=NaN;
         else
             F.report('Calibration timed out!\n')
             F.reportError('Calibration timed out!');

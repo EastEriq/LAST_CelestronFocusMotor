@@ -7,6 +7,7 @@ classdef CelestronFocuser < obs.focuser
     properties (GetAccess=public, SetAccess=private)
         Status char    = 'unknown';
         LastPos double = NaN;
+        TargetPos double = NaN;
         FocuserType = 'Celestron Focus Motor'; 
     end
         
@@ -55,23 +56,24 @@ classdef CelestronFocuser < obs.focuser
                 F.LastError='';
             catch
                 focus=NaN;
-                F.LastError='could not read focuser position';
+                F.reportError(sprintf('could not read focuser %s position',F.Id));
             end
         end
         
         function set.Pos(F,focus)
             % empirically, the moving rate seems to be ~300 steps/sec
-            if focus<F.Limits(1) ||  focus>F.Limits(2)
-                F.LastError='Focuser commanded to move out of range!';
+            if focus<F.Limits(1) || focus>F.Limits(2)
+                F.reportError(sprintf(['Focuser %s commanded to move to %d', ...
+                                       ' out of its range [%d,%d]!'], focus,F.Id,F.Limits));
             else
                 try
                     F.LastPos=F.Pos; %this works
                     F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
                     F.LastError=''; %this fails
-                    % former abstractor code was arming here a timer for
-                    %  polling focuser status till destination reached
+                    F.TargetPos=focus;
                 catch
-                    F.LastError='set new focus position failed';
+                    F.reportError(sprintf('set focus to %d for focuser %s failed',...
+                                          focus, F.Id));
                 end
             end
         end
@@ -120,7 +122,8 @@ classdef CelestronFocuser < obs.focuser
                     end
                 end
             catch
-                F.LastError='could not get status, communication problem?';
+                F.reportError(sprintf(['could not get focuser %s status,',...
+                                       ' communication problem?',F.Id));
             end
         end
         
