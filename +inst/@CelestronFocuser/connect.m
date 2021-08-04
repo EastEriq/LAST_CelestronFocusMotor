@@ -21,6 +21,7 @@ function F=connect(F,Port)
                 F.report(['no Celestron Focus Motor found on ' Port '\n'])
             end
         end
+        return
     end
 
     if ~exist('Port','var') && ~isempty(F.PhysicalAddress)
