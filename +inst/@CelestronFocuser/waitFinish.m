@@ -23,12 +23,14 @@ function Flag = waitFinish(Focuser,timeout)
     Flag = false;
     t0=now;
     while strcmp(Focuser.Status,'moving') && (now-t0)*24*3600<timeout
-        pause(1);
-        Focuser.report('.')
+        pause(0.5);
+        % Focuser.report('.')
     end
-    pause(0.5);
+    
+    %pause(0.5);
+    
     if (strcmp(Focuser.Status, 'idle'))
-        Focuser.report(sprintf('\nFocuser %s movement completed\n',Focuser.Id))
+        Focuser.report(sprintf('Focuser %s movement completed\n',Focuser.Id))
         Flag = true;
     else
         Focuser.reportError(sprintf('A problem has occurred with the focuser. Status: %s\n',...
