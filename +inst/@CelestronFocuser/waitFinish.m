@@ -1,6 +1,7 @@
 function Flag = waitFinish(Focuser,timeout)
 % wait until the focuser ends moving and returns to idle,
 %  with a timeout in case it gets stuck or offline
+% Result: true if the focuser is finally idle
     if ~exist('timeout','var')
         try
             % if the focuser is unreachable, the following would
