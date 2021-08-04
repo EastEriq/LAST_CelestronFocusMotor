@@ -59,7 +59,7 @@ function F=connect(F,Port)
             F.PhysicalId=F.PhysicalAddress;
         end
     catch
-        F.reportError(['Port "' Port '" for Celestron Focus Motor cannot be opened']);
+        F.reportError(['Port "' char(Port) '" for Celestron Focus Motor cannot be opened']);
         delete(instrfind('Port',Port)) % (catch also error here?)
     end
 end
