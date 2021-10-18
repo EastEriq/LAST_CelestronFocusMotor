@@ -56,15 +56,15 @@ classdef CelestronFocuser < obs.focuser
                 F.LastError='';
             catch
                 focus=NaN;
-                F.reportError(sprintf('could not read focuser %s position',F.Id));
+                F.reportError('could not read focuser %s position',F.Id);
             end
         end
         
         function set.Pos(F,focus)
             % empirically, the moving rate seems to be ~300 steps/sec
             if focus<F.Limits(1) || focus>F.Limits(2)
-                F.reportError(sprintf(['Focuser %s commanded to move to %d,', ...
-                                       ' out of its range [%d,%d]!'], F.Id,focus,F.Limits));
+                F.reportError('Focuser %s commanded to move to %d, out of its range [%d,%d]!',...
+                                       F.Id,focus,F.Limits);
             else
                 try
                     F.LastPos=F.Pos; %this works
@@ -72,8 +72,8 @@ classdef CelestronFocuser < obs.focuser
                     F.LastError=''; %this fails
                     F.TargetPos=focus;
                 catch
-                    F.reportError(sprintf('set focus to %d for focuser %s failed',...
-                                          focus, F.Id));
+                    F.reportError('set focus to %d for focuser %s failed',...
+                                          focus, F.Id);
                 end
             end
         end
@@ -122,8 +122,8 @@ classdef CelestronFocuser < obs.focuser
                     end
                 end
             catch
-                F.reportError(sprintf(['could not get focuser %s status,',...
-                                       ' communication problem?'],F.Id));
+                F.reportError(['could not get focuser %s status,',...
+                                       ' communication problem?'],F.Id);
             end
         end
         
