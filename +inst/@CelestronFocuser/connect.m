@@ -49,6 +49,12 @@ function F=connect(F,Port)
 
     try
         if strcmp(F.SerialResource.status,'closed')
+            % now, the next fopen causes a warning like
+            %  RXTX fhs_lock() Error: opening lock file: /var/lock/LCK..ttyACM0: File exists
+            %  to be written on stderr, for every OTHER serial port of the
+            %  system which is already in use, i.e. not for the specific
+            %  port we are opening. Probably it is a bug of serial,
+            %  which might be resolved by serialport. Anyway, innocuous
             fopen(F.SerialResource);
             set(F.SerialResource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
             % (quirk: write terminator has to be 10 so that 10 in output
