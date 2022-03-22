@@ -12,7 +12,7 @@ classdef CelestronFocuser < obs.focuser
     end
         
     properties (SetAccess=public, GetAccess=private)
-        relPos=NaN;
+        RelPos=NaN;
     end
         
     properties (Hidden=true)
@@ -78,7 +78,7 @@ classdef CelestronFocuser < obs.focuser
             end
         end
         
-        function set.relPos(F,incr)
+        function set.RelPos(F,incr)
             p=F.Pos;
             F.Pos=p+incr;
              % (don't use F.Pos=F.Pos+incr, it will fail, likely for access
