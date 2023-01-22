@@ -24,7 +24,8 @@ classdef CelestronFocuser < obs.focuser
         SerialResource % the serial object corresponding to Port
     end
     
-    properties (Hidden=true, GetAccess=public, SetAccess=private, Transient)
+    properties (Hidden=true, GetAccess=public, SetAccess=private, Transient, ...
+                Description='api,display,must-be-connected')
         Limits=[NaN,NaN];
     end
 
@@ -44,7 +45,7 @@ classdef CelestronFocuser < obs.focuser
 
     end
 
-    methods 
+    methods
         %getters and setters
         function focus=get.Pos(F)
             % former abstractor code had here a check IsConnected, and
@@ -129,4 +130,8 @@ classdef CelestronFocuser < obs.focuser
         
     end
     
+    % prototpes of exported methods, which are defined in separate files
+    methods(Description='api,must-be-connected')
+        abort(F)
+    end
 end

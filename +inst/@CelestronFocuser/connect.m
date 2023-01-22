@@ -59,6 +59,7 @@ function F=connect(F,Port)
             set(F.SerialResource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
             % (quirk: write terminator has to be 10 so that 10 in output
             %  binary data is sent as such)
+            F.Connected=true;
         end
         F.Port=F.SerialResource.Port;
         if check_for_focuser(F)
