@@ -131,7 +131,13 @@ classdef CelestronFocuser < obs.focuser
     end
     
     % prototpes of exported methods, which are defined in separate files
+    methods(Description='api')
+        connect(F,Port)
+    end
+
     methods(Description='api,must-be-connected')
+        disconnect(F)
         abort(F)
     end
+
 end
