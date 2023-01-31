@@ -32,7 +32,9 @@ classdef CelestronFocuser < obs.focuser
     
     methods
         % constructor and destructor
-        function F=CelestronFocuser(id)
+        function F=CelestronFocuser(Locator)
+            % Now REQUIRES locator. Think at implications
+            id = Locator.Location;
             % call the parent constructor
             F=F@obs.focuser(id);
             % does nothing, connecting to port in a separate method
