@@ -7,7 +7,6 @@ This is a trimdown of the former, controlling only the Focus Motor and not the w
 The AUXmsg class (and its ancillary enumerators, and the basic communication methods) would deserve being part of an independent package, if it is to be shared with a general class for the NexStar mount.
 Here, as a rule, files starting with capitals denote classes.
 
-
 It is left to the responsibility of the LAST integrator to copy or link the files of this project into an `+obs\+instr` tree. I couln't think of any viable directory structure satisfying both `git` project naming constraints (even considering `subtree`s and `submodule`s) and Matlab/MAAT/LAST organization requirements.
 
 <u>Note on connection:</u> On the focuser motor I tried, connecting the computer on to the USB
@@ -24,14 +23,15 @@ resources and scan again all existing serial devices to find the one the focuser
 - The focuser remembers its last position and its calibration limits at poweroff.
 - Calibration is performed by searching for the lower point of high resistance (high
   drain current, probably) first. Then this is set as zero of the index, and the motor searches
-  the upper high resistance point. Once these two points are found, the operating range is set as
-  some hundred steps narrower than the points found (I have not understood whether by a fixed number or
-  by two current thresholds), and the motor is brought somewhere mid range.
+  the upper high resistance point. Once these two points are found, the operating range is set
+  as the value of the upper index. The range limits are then defined, by Celestron choice, to be
+  _operating_range_*[1,19]/18. The motor is then moved somewhere mid range.
 - the motor runs at ~400steps/second. 1000 steps are a full turn. Increasing counts mean CCW rotation.
-- The step counter wraps around at 60000 (not 2^16). This is seen When attempting calibration of a
+- The step counter wraps around at 60000 (not 2^16). This is seen when attempting calibration of a
   mechanically disconnected from focus screw.
 - On the RASA telecope, 1 turn equals 1mm. CCW rotation pushes inside the mirror, i.e toward the corrector
-  plate, i.e. it focuses the telecsope farther. The total range is seen to be ~35000 steps.
-- the focuser is not made for working when stuck. Among the rest the overcurrent probably causes a voltage drop
+  plate, i.e. it focuses the telescope farther. The total range is seen to be ~35000 steps, i.e.
+  the tick limits may result in ~[1500,36500].
+- The focuser is not made for working when stuck. Among the rest the overcurrent probably causes a voltage drop
   also on the communication circuits, which cause USB-serial drops and disconnects.
-- forcing the motor to turn when powered, using a wrench, causes permanent damage to the gearbox.
+- Forcing the motor to turn when powered, using a wrench, causes permanent damage to the gearbox.
