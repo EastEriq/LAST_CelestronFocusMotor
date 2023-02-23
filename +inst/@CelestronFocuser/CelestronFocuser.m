@@ -4,6 +4,10 @@ classdef CelestronFocuser < obs.focuser
         Pos double =NaN;
     end
     
+    properties (Description='api')
+        Connected logical = false;
+    end
+    
     properties (GetAccess=public, SetAccess=private)
         Status char    = 'unknown';
         LastPos double = NaN;
