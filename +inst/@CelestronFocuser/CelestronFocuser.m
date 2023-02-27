@@ -93,6 +93,10 @@ classdef CelestronFocuser < obs.focuser
         end
         
         function set.Pos(F,focus)
+            % the Api passes arguments as strings
+            if isa(focus,'char')
+                focus=str2double(focus);
+            end
             % empirically, the moving rate seems to be ~300 steps/sec
             if focus<F.Limits(1) || focus>F.Limits(2)
                 F.reportError('Focuser %s commanded to move to %d, out of its range [%d,%d]!',...
@@ -163,7 +167,7 @@ classdef CelestronFocuser < obs.focuser
     
     % prototpes of exported methods, which are defined in separate files
     methods(Description='api')
-        connect(F,Port)
+        connect(F)
     end
 
     methods(Description='api,must-be-connected')

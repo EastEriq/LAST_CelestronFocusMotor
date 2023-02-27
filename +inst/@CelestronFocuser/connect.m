@@ -1,11 +1,11 @@
-function F=connect(F,Port)
+function F=connect(F)
 % connect to a focus motor on the specified Port. Port can be the name of a
 % serial resource (e.g. '/dev/ttyACM0') or a physical PCI address
 % (e.g 'pci-0000:00:14.0-usb-0:8:1.0')
 % All serial ports are tested if Port is omitted.
 
 % PhysicalAddress is a property of the superclass obs.focuser
-    if (~exist('Port','var') || isempty(Port)) && isempty(F.PhysicalAddress)
+    if isempty(F.PhysicalAddress)
         for Port=seriallist
             try
                 % look for one NexStar device on every
@@ -22,16 +22,14 @@ function F=connect(F,Port)
             end
         end
         return
+    else
+        if isPCIusb(string(F.PhysicalAddress))
+            Port=idpath_to_port(F.PhysicalAddress);
+        else
+            Port=F.PhysicalAddress;
+        end
     end
-
-    if ~exist('Port','var') && ~isempty(F.PhysicalAddress)
-        Port=idpath_to_port(F.PhysicalAddress);
-    end
-    
-    if isPCIusb(string(Port))
-        Port=idpath_to_port(string(Port));
-    end
-    
+        
     try
         delete(instrfind('Port',Port))
     catch
