@@ -38,12 +38,37 @@ classdef CelestronFocuser < obs.focuser
         % constructor and destructor
         function F=CelestronFocuser(Locator)
             % Now REQUIRES locator. Think at implications
-            id = Locator.Location;
+            %
+            % Arie:
+            %  The Locator structure contains the break-up of the Location
+            %  string into fields.  You can use the separate fields to
+            %  compose the path to the respective config file.
+            %
+            %   Locator with properties:
+            % 
+            %     CanonicalLocation: "LAST.1.mount11.focuser1"
+            %             ProjectName: "LAST"
+            %                      NodeId: 1
+            %                     MountId: 11
+            %                 MountSide: "e"
+            %                 EquipType: Focuser
+            %                      EquipId: 1
+            %                   EquipPos: "NE"
+            %                      Project: [1×1 obs.api.Project]
+            %                 Hostname: "last11e"
+            %                 IpAddress: "127.0.0.1"
+            %            ForceRemote: 0
+            %                   IsRemote: 0
+            %                       IsLocal: 1
+            %                DriverClass: "inst.CelestronFocuser"
+            %
+
+            id = Locator.CanonicalLocation;
             % call the parent constructor
             F=F@obs.focuser(id);
             % does nothing, connecting to port in a separate method
         end
-        
+
         function delete(F)
             delete(F.SerialResource)
             % shall we try-catch and report success/failure?
