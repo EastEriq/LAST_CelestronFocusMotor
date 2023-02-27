@@ -9,7 +9,6 @@ classdef CelestronFocuser < obs.focuser
     end
     
     properties (GetAccess=public, SetAccess=private)
-        Status char    = 'unknown';
         LastPos double = NaN;
         TargetPos double = NaN;
         FocuserType = 'Celestron Focus Motor'; 
@@ -30,9 +29,10 @@ classdef CelestronFocuser < obs.focuser
     
     properties (Hidden=true, GetAccess=public, SetAccess=private, Transient, ...
                 Description='api,must-be-connected')
+        Status char    = 'unknown';
         Limits=[NaN,NaN];
     end
-
+    
     
     methods
         % constructor and destructor
