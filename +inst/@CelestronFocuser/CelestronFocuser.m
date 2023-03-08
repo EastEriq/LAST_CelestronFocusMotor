@@ -5,7 +5,7 @@ classdef CelestronFocuser < obs.focuser
     end
     
     properties (Description='api')
-        Connected logical = false;
+        Connected;
     end
     
     properties (GetAccess=public, SetAccess=private)
@@ -60,6 +60,9 @@ classdef CelestronFocuser < obs.focuser
 %         end
 
         function set.Connected(F,tf)
+            if isa(tf,'string')
+                tf=eval(tf);
+            end
             % don't try to connect if already connected, as per API wiki
             if ~F.Connected && tf
                 F.connect
