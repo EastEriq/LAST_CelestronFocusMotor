@@ -52,10 +52,12 @@ classdef CelestronFocuser < obs.focuser
 
     methods
         %getters and setters
-        function tf=get.Connected(F)
-            % query Pos to ascertain. if this fails, Connected is set false
-            tf=~isnan(F.Pos);
-        end
+%         function tf=get.Connected(F)
+%             % FIXME - think at this better later. Like this it is not
+%             %  good, tries too much before the focuser is actually connected
+%             % query Pos to ascertain. if this fails, Connected is set false
+%             tf=~isnan(F.Pos);
+%         end
 
         function set.Connected(F,tf)
             % don't try to connect if already connected, as per API wiki
