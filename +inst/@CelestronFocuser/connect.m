@@ -1,4 +1,4 @@
-function F=connect(F)
+function connect(F)
 % connect to a focus motor on the specified Port. Port can be the name of a
 % serial resource (e.g. '/dev/ttyACM0') or a physical PCI address
 % (e.g 'pci-0000:00:14.0-usb-0:8:1.0')
