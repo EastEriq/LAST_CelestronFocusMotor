@@ -4,6 +4,7 @@ function disconnect(F)
        F.reportError('Cannot disconnect focuser on port %s',F.Port)
    else
       fclose(F.SerialResource);
+      delete(F.SerialResource)
       F.Connected=false;
    end
 end

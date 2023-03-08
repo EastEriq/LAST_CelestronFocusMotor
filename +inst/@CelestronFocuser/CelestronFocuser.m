@@ -38,31 +38,6 @@ classdef CelestronFocuser < obs.focuser
         % constructor and destructor
         function F=CelestronFocuser(Locator)
             % Now REQUIRES locator. Think at implications
-            %
-            % Arie:
-            %  The Locator structure contains the break-up of the Location
-            %  string into fields.  You can use the separate fields to
-            %  compose the path to the respective config file.
-            %
-            %   Locator with properties:
-            % 
-            %     CanonicalLocation: "LAST.1.mount11.focuser1"
-            %             ProjectName: "LAST"
-            %                      NodeId: 1
-            %                     MountId: 11
-            %                 MountSide: "e"
-            %                 EquipType: Focuser
-            %                      EquipId: 1
-            %                   EquipPos: "NE"
-            %                      Project: [1×1 obs.api.Project]
-            %                 Hostname: "last11e"
-            %                 IpAddress: "127.0.0.1"
-            %            ForceRemote: 0
-            %                   IsRemote: 0
-            %                       IsLocal: 1
-            %                DriverClass: "inst.CelestronFocuser"
-            %
-
             id = Locator.CanonicalLocation;
             % call the parent constructor
             F=F@obs.focuser(id);
@@ -70,14 +45,27 @@ classdef CelestronFocuser < obs.focuser
         end
 
         function delete(F)
-            delete(F.SerialResource)
-            % shall we try-catch and report success/failure?
+            F.disconnect
         end
 
     end
 
     methods
         %getters and setters
+        function tf=get.Connected(F)
+            % query Pos to ascertain. if this fails, Connected is set false
+            tf=~isnan(F.Pos);
+        end
+
+        function set.Connected(F,tf)
+            % don't try to connect if already connected, as per API wiki
+            if ~F.Connected && tf
+                F.connect
+            elseif F.Connected && ~tf
+                F.disconnect
+            end
+        end
+
         function focus=get.Pos(F)
             % former abstractor code had here a check IsConnected, and
             %  attempted to reconnect - I think such remediations should be
@@ -89,6 +77,7 @@ classdef CelestronFocuser < obs.focuser
             catch
                 focus=NaN;
                 F.reportError('could not read focuser %s position',F.Id);
+                F.Connected=false;
             end
         end
         
@@ -106,6 +95,7 @@ classdef CelestronFocuser < obs.focuser
                 catch
                     F.reportError('set focus to %d for focuser %s failed',...
                                           focus, F.Id);
+                    F.Connected=false;
                 end
             end
         end
@@ -124,6 +114,7 @@ classdef CelestronFocuser < obs.focuser
                         F.bytes2num(hexlimits.bindata(5:8))];
             catch
                 Limits=[NaN,NaN];
+                F.Connected=false;
             end
         end
         
@@ -156,18 +147,15 @@ classdef CelestronFocuser < obs.focuser
             catch
                 F.reportError(['could not get focuser %s status,',...
                                        ' communication problem?'],F.Id);
+                F.Connected=false;
             end
         end
         
     end
     
     % prototpes of exported methods, which are defined in separate files
-    methods(Description='api')
-        connect(F)
-    end
 
     methods(Description='api,must-be-connected')
-        disconnect(F)
         abort(F)
     end
 
