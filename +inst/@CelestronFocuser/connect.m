@@ -1,4 +1,4 @@
-function connect(F)
+function connected=connect(F)
 % connect to a focus motor on the specified Port. Port can be the name of a
 % serial resource (e.g. '/dev/ttyACM0') or a physical PCI address
 % (e.g 'pci-0000:00:14.0-usb-0:8:1.0')
@@ -11,14 +11,17 @@ function connect(F)
                 % look for one NexStar device on every
                 %  possible serial port. Pity we cannot
                 %  look for a named (i.e. SN) unit
-                F.connect(Port);
+                F.PhysicalAddress=Port;
+                F.connect();
                 if isempty(F.LastError)
+                    F.Connected=true; % calls F.connect again, too bad
                     return
                 else
                     delete(instrfind('Port',Port))
+                    F.PhysicalAddress=[];
                 end
             catch
-                F.report(['no Celestron Focus Motor found on ' Port '\n'])
+                F.report(['no Celestron Focus Motor found on ' char(Port) '\n'])
             end
         end
         return
@@ -61,7 +64,7 @@ function connect(F)
         F.Port=F.SerialResource.Port;
         if check_for_focuser(F)
             F.PhysicalId=F.PhysicalAddress;
-            F.Connected=true;
+            connected=true;
         end
     catch
         F.reportError(['Port "' char(Port) '" for Celestron Focus Motor cannot be opened']);

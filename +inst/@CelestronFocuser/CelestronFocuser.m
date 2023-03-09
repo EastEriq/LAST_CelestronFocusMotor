@@ -5,7 +5,7 @@ classdef CelestronFocuser < obs.focuser
     end
     
     properties (Description='api')
-        Connected;
+        Connected; % untyped, because the setter may receive a logical or a string
     end
     
     properties (GetAccess=public, SetAccess=private)
@@ -38,36 +38,48 @@ classdef CelestronFocuser < obs.focuser
         % constructor and destructor
         function F=CelestronFocuser(Locator)
             % Now REQUIRES locator. Think at implications
-            id = Locator.CanonicalLocation;
+            if exist('Locator','var') 
+                if isa(Locator,'obs.api.Locator')
+                    id = Locator.CanonicalLocation;
+                else
+                    id=Locator;
+                end
+            else
+                id='';
+            end
             % call the parent constructor
             F=F@obs.focuser(id);
             % does nothing, connecting to port in a separate method
         end
 
         function delete(F)
-            F.disconnect
+            if F.Connected
+                F.disconnect;
+            end
         end
 
     end
 
     methods
         %getters and setters
-%         function tf=get.Connected(F)
-%             % FIXME - think at this better later. Like this it is not
-%             %  good, tries too much before the focuser is actually connected
-%             % query Pos to ascertain. if this fails, Connected is set false
-%             tf=~isnan(F.Pos);
-%         end
+         %function tf=get.Connected(F)
+         %     % FIXME - think at this better later. Perhaps an overkill
+         %     tf = strlength(F.Port)>0 && check_for_focuser(F);
+         %end
 
         function set.Connected(F,tf)
+            % when called via the API, the argument is received as a string
             if isa(tf,'string')
                 tf=eval(tf);
             end
+            if isempty(F.Connected)
+                F.Connected=false;
+            end
             % don't try to connect if already connected, as per API wiki
             if ~F.Connected && tf
-                F.connect
+                F.Connected=F.connect;
             elseif F.Connected && ~tf
-                F.disconnect
+                F.Connected=~F.disconnect;
             end
         end
 
