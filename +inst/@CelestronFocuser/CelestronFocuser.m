@@ -49,7 +49,8 @@ classdef CelestronFocuser < obs.focuser
             end
             % call the parent constructor
             F=F@obs.focuser(id);
-            % does nothing, connecting to port in a separate method
+            % fill initial status of untyped .Connected
+            F.Connected=false;
         end
 
         function delete(F)
