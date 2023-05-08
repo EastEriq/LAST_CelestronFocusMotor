@@ -4,6 +4,8 @@ function connected=connect(F)
 % (e.g 'pci-0000:00:14.0-usb-0:8:1.0')
 % All serial ports are tested if Port is omitted.
 
+    connected=false;
+    
 % PhysicalAddress is a property of the superclass obs.focuser
     if isempty(F.PhysicalAddress)
         for Port=seriallist
@@ -12,9 +14,8 @@ function connected=connect(F)
                 %  possible serial port. Pity we cannot
                 %  look for a named (i.e. SN) unit
                 F.PhysicalAddress=Port;
-                F.connect();
+                connected=F.connect();
                 if isempty(F.LastError)
-                    F.Connected=true; % calls F.connect again, too bad
                     return
                 else
                     delete(instrfind('Port',Port))

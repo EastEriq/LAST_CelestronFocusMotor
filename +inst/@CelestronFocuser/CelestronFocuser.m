@@ -1,6 +1,6 @@
 classdef CelestronFocuser < obs.focuser
     
-    properties (Description='api,must-be-connected')
+    properties (Description='api,must-be-connected, encode_Value')
         Pos double =NaN;
     end
     
@@ -28,7 +28,7 @@ classdef CelestronFocuser < obs.focuser
     end
     
     properties (Hidden=true, GetAccess=public, SetAccess=private, Transient, ...
-                Description='api,must-be-connected')
+                Description='api,must-be-connected, encode_Value')
         Status char    = 'unknown';
         Limits=[NaN,NaN];
     end
@@ -40,7 +40,7 @@ classdef CelestronFocuser < obs.focuser
             % Now REQUIRES locator. Think at implications
             if exist('Locator','var') 
                 if isa(Locator,'obs.api.Locator')
-                    id = Locator.CanonicalLocation;
+                    id = Locator.Canonical;
                 else
                     id=Locator;
                 end
