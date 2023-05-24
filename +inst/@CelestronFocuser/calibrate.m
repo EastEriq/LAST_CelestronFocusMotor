@@ -26,7 +26,6 @@ function calibrate(F)
             lastpos(end)=F.Pos;
             F.report('... t=%.1f, calibration stage %d, f=%d\n',t,stage,lastpos(end))
             if all(lastpos==lastpos(end))
-                F.report('Focuser stuck!\n')
                 F.reportError('Focuser stuck during calibration!');
                 break
             end
@@ -36,7 +35,6 @@ function calibrate(F)
             F.LastError='';
             F.TargetPos=NaN;
         else
-            F.report('Calibration timed out!\n')
             F.reportError('Calibration timed out!');
         end
     catch
