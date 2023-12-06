@@ -5,8 +5,10 @@ function HasFocuser=check_for_focuser(F)
                 resp=F.query(inst.CelDev.FOCU,inst.AUXcmd.GET_VER);
                 HasFocuser=resp.good;
                 F.LastError='';
-            catch
-                F.LastError=['not able to check for Focus Motor on ' F.Port];                
+            catch ex
+                F.LastError=['not able to check for Focus Motor on ' F.Port];
+                F.reportException(ex, F.LastError);
+                
             end
             
             if HasFocuser

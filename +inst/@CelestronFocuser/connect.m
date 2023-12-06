@@ -21,8 +21,8 @@ function connected=connect(F)
                     delete(instrfind('Port',Port))
                     F.PhysicalAddress=[];
                 end
-            catch
-                F.report(['no Celestron Focus Motor found on ' char(Port) '\n'])
+            catch ex
+                F.reportException(ex, ['no Celestron Focus Motor found on ' char(Port) '\n'])
             end
         end
         return
@@ -36,8 +36,8 @@ function connected=connect(F)
         
     try
         delete(instrfind('Port',Port))
-    catch
-        F.reportError(['cannot delete Celestron Focus Motor Port object ' Port ' -maybe OS disconnected it?']);
+    catch ex
+        F.reportException(ex, ['cannot delete Celestron Focus Motor Port object ' Port ' -maybe OS disconnected it?']);
     end
 
     try
@@ -45,8 +45,8 @@ function connected=connect(F)
         % serial has been deprecated in 2019b in favour of
         %  serialport... all communication code should be
         %  transitioned...
-    catch
-        F.reportError(['cannot create Port object ' Port ' for Celestron Focus Motor']);
+    catch ex
+        F.reportException(ex, ['cannot create Port object ' Port ' for Celestron Focus Motor']);
     end
 
     try
@@ -67,8 +67,8 @@ function connected=connect(F)
             F.PhysicalId=F.PhysicalAddress;
             connected=true;
         end
-    catch
-        F.reportError(['Port "' char(Port) '" for Celestron Focus Motor cannot be opened']);
+    catch ex
+        F.reportException(ex, ['Port "' char(Port) '" for Celestron Focus Motor cannot be opened']);
         delete(instrfind('Port',Port)) % (catch also error here?)
     end
 end

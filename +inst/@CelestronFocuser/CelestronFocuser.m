@@ -4,7 +4,7 @@ classdef CelestronFocuser < obs.focuser
         Pos double =NaN;
     end
     
-    properties (Description='api')
+    properties (Description='api, type=logical, rw')
         Connected; % untyped, because the setter may receive a logical or a string
     end
     
@@ -28,8 +28,12 @@ classdef CelestronFocuser < obs.focuser
     end
     
     properties (Hidden=true, GetAccess=public, SetAccess=private, Transient, ...
-                Description='api,must-be-connected, encode_Value')
+                Description='api,must-be-connected, encode_Value, type=string')
         Status char    = 'unknown';
+    end
+    
+    properties (Hidden=true, GetAccess=public, SetAccess=private, Transient, ...
+                Description='api,must-be-connected, encode_Value')
         Limits=[NaN,NaN];
     end
     
@@ -92,9 +96,9 @@ classdef CelestronFocuser < obs.focuser
                 resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_POSITION);
                 focus=resp.numdata;
                 F.LastError='';
-            catch
+            catch ex
                 focus=NaN;
-                F.reportError('could not read focuser %s position',F.Id);
+                F.reportException(ex, 'could not read focuser %s position',F.Id);
                 F.Connected=false;
             end
         end
@@ -130,7 +134,7 @@ classdef CelestronFocuser < obs.focuser
                 hexlimits=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_HS_POSITIONS);
                 Limits=[F.bytes2num(hexlimits.bindata(1:4)),...
                         F.bytes2num(hexlimits.bindata(5:8))];
-            catch
+            catch ex
                 Limits=[NaN,NaN];
                 F.Connected=false;
             end
@@ -162,8 +166,8 @@ classdef CelestronFocuser < obs.focuser
                         s='stuck';
                     end
                 end
-            catch
-                F.reportError(['could not get focuser %s status,',...
+            catch ex
+                F.reportException(ex, ['could not get focuser %s status,',...
                                        ' communication problem?'],F.Id);
                 F.Connected=false;
             end
@@ -175,6 +179,18 @@ classdef CelestronFocuser < obs.focuser
 
     methods(Description='api,must-be-connected')
         abort(F)
+    end
+    
+    methods (Description='api, type_param1=string, type_param2=double, type_param3=logical, type_param4=integer, type_out=string')
+        function out = test_params(Obj, param1, param2, param3, param4)
+            out = sprintf("param1='%s', param2=%.2f, param3=%s, param4=%d", param1, param2, string(param3), param4);
+        end
+    end
+    
+    methods (Description='api')
+        function out = test_exception(Obj)
+            throw(MException('OCS:Kaboom', 'Kaboom: You asked for it!'));
+        end
     end
 
 end
