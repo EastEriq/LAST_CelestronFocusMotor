@@ -42,11 +42,14 @@ classdef CelestronFocuser < obs.focuser
         % constructor and destructor
         function F=CelestronFocuser(Locator)
             % Now REQUIRES locator. Think at implications
-            if exist('Locator','var') 
+            if exist('Locator','var')
                 if isa(Locator,'obs.api.Locator')
                     id = Locator.Canonical;
+                elseif isa(Locator,'char') || isa(Locator,'string')
+                    L=obs.api.Locator('Location',Locator);
+                    id=L.Canonical;
                 else
-                    id=Locator;
+                    id='';
                 end
             else
                 id='';
@@ -179,6 +182,7 @@ classdef CelestronFocuser < obs.focuser
 
     methods(Description='api,must-be-connected')
         abort(F)
+        probe(F)
     end
     
     methods (Description='api, type_param1=string, type_param2=double, type_param3=logical, type_param4=integer, type_out=string')
