@@ -182,7 +182,7 @@ classdef CelestronFocuser < obs.focuser
 
     methods(Description='api,must-be-connected')
         abort(F)
-        probe(F)
+        out = probe(F)
     end
     
     methods (Description='api, type_param1=string, type_param2=double, type_param3=logical, type_param4=integer, type_out=string')
