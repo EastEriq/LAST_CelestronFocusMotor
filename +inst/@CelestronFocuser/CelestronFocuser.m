@@ -1,6 +1,6 @@
 classdef CelestronFocuser < obs.focuser
     
-    properties (Description='api,must-be-connected, encode_Value')
+    properties (Description='api,must-be-connected, encode_Value, rw')
         Pos double =NaN;
     end
     
