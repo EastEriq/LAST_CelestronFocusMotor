@@ -33,8 +33,12 @@ classdef CelestronFocuser < obs.focuser
         % constructor and destructor
         function F=CelestronFocuser(id)
             % call the parent constructor
+            if nargin==0
+                id='';
+            end
             F=F@obs.focuser(id);
-            % does nothing, connecting to port in a separate method
+            F.GitVersion=obs.util.tools.getgitversion(mfilename('fullpath'));
+            % do nothing else, connecting to port in a separate method
         end
         
         function delete(F)
