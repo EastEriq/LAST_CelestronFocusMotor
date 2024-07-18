@@ -21,6 +21,11 @@ resources and scan again all existing serial devices to find the one the focuser
 ## other notes on the focuser itself:
 
 - The focuser remembers its last position and its calibration limits at poweroff.
+- If the focuser receives a new position command while it is moving, it immediately changes
+  its target to the new position. If many commands are received, the focuser will go to
+  the last of the positions. If a new position is command is received while moving in one
+  direction, the focuser will decelerate a bit before moving in the opposite direction,
+  if asked to.
 - Calibration is performed by searching for the lower point of high resistance (high
   drain current, probably) first. Then this is set as zero of the index, and the motor searches
   the upper high resistance point. Once these two points are found, the operating range is set
