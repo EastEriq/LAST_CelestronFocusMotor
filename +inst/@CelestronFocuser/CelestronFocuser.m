@@ -22,6 +22,11 @@ classdef CelestronFocuser < obs.focuser
     % non-API-demanded properties, Enrico's judgement
     properties (Hidden=true) 
         SerialResource % the serial object corresponding to Port
+        SerialCommand
+        SerialReply
+        % Add a timer object for querying the controller with
+        %  noninterruptible callbacks
+        SerialCollector timer;
     end
     
     properties (Hidden=true, GetAccess=public, SetAccess=private, Transient)
@@ -37,8 +42,21 @@ classdef CelestronFocuser < obs.focuser
                 id='';
             end
             F=F@obs.focuser(id);
+            % FIXME - this asks if the mirror is locked, and if not the
+            %  obs.focuser constructor deletes the object all together,
+            %  causing an error in the following line
             F.GitVersion=obs.util.tools.getgitversion(mfilename('fullpath'));
             % do nothing else, connecting to port in a separate method
+            % set the callback function here, instead of creating anew the
+            %  timer. I have no good solution for deleting the timer when 
+            %  clearing the object, so I try to delete it if it is
+            %  already in the workspace. It is important to delete, rather
+            %  than to recycle, because the timer associated to a destroyed
+            %  object will reference an invalid serial resource
+            delete(timerfind('Name','FocuserSerialInquirer'));
+            F.SerialCollector=timer('Name','FocuserSerialInquirer',...
+                        'ExecutionMode','SingleShot','BusyMode','Queue',...
+                        'StartDelay',0,'TimerFcn',@(~,~)F.serialQueryCallback);
         end
         
         function delete(F)

@@ -10,37 +10,53 @@
                 %  abstraction level: error, F.LastError, stdout, what?
                 error(['Port ' N.Port 'disappeared'])
             else
-                % Locking mechanism: check the timestamp stored in
-                %  X.SerialResource.UserData. If empty, we're clear to go. If it
-                %  contains a numeric timestamp, check if it is more than 100msec old
-                %  (having ascertained that the typical turnover time for a query
-                %  is ~30?ms) to infer that it was left stale by mistake, then also
-                %  go. If it is a recent timestamp, give up. This mechanism is
-                %  mainly intended so that callback queries don't disrupt main
-                %  execution thread ones. If we are lucky, the query asked by the
-                %  callback will be retried.
-                if ~isempty(N.SerialResource.UserData) && ...
-                        (now - N.SerialResource.UserData)*86400 < 0.1
-                    N.report('serial query in progress on another thread, giving up\n')
-                    % Dispose of previous traffic potentially having
-                    % filled the inbuffer, for an immediate response
+                N.SerialCommand=struct('dest',dest,'cmd',cmd,'data',[]);
+                if exist('data','var')
+                    N.SerialCommand.data=data;
+                end
+                % Locking mechanism: the monolithic part of the query (serial
+                %  write-read) is run in a one shot timer callback function
+                %  initiated on purpose. Such calls are uninterruptible and queued,
+                %  as well as the instrument callbacks, and thus seem to provide a decent
+                %  solution when interactive (code) and messenger callbacks
+                %  coexist asynchronously.
+                % Using such dummy timers for the purpose may severely
+                %  interfere with other timed callbacks used in the same matlab
+                %  session, be warned. I suppose that any timer operation involving
+                %  communication with the mount will deadlock.
+                % I also considered callbacks triggered by notify() on class
+                %  events. It turn out that they are interruptible instead,
+                %  so that a second callback can interrupt the executing
+                %  first between writing and reading the serial port, so they
+                %  were not a soultion
+                ds=dbstack;
+                callchain={ds.name};
+                calledFromCallback = any(contains(callchain,{'timercb','instrcb'}));
+                
+                if calledFromCallback
+                    % call directly the monolithic query
+                    N.reportDebug('** calling monolithic query, from callback\n');
+                    resp=N.serialQueryCallback;
                 else
-                    N.SerialResource.UserData=now;
-                    flushinput(N.SerialResource)
-                    % just reading all bytes sometimes is not enough
-                    %  when the buffer is full since a long time, the expected
-                    %  reply gets lost anyway (don't know why)
-                    %  if N.Port.BytesAvailable>0
-                    %      %disp(['purging buffer with ' num2str(N.Port.BytesAvailable) ' bytes'])
-                    %                 fread(N.Port,N.Port.BytesAvailable);
-                    %  end
-                    if exist('data','var')
-                        N.send(dest,cmd,data);
-                    else
-                        N.send(dest,cmd);
+                    % call it via a callback, so that it is uninterruptible.
+                    % Using N.SerialCommand and N.SerialReply to exchange data with the
+                    %  callback
+                    N.reportDebug('** calling monolithic query, from code\n');
+                    start(N.SerialCollector); stop(N.SerialCollector);
+                    try
+                        resp=N.SerialReply;
+                    catch SE
+                        % comment (old) from the equivalent in
+                        %  XerxesMountBinary.binaryQuery
+                        % FIXME - we shouldn't get here. We do, sometimes with
+                        %  bytes (cmd?) in X.SerialResource.UserData, sometimes
+                        %  with "Unrecognized function or variable
+                        %  'errormessages'"
+                        for j=1:numel(SE.stack)
+                            fprintf('%s line %d\n',SE.stack(j).name,SE.stack(j).line)
+                        end
+                        disp(N.SerialResource.UserData)
                     end
-                    resp=N.waitResponse(dest,cmd);
-                    N.SerialResource.UserData=[];
                 end
             end
         end
