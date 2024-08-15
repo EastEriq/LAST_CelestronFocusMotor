@@ -5,10 +5,13 @@ classdef CelestronFocuser < obs.focuser
     end
     
     properties (GetAccess=public, SetAccess=private)
+        FocuserType = 'Celestron Focus Motor'; 
+    end
+    
+    properties (GetAccess=public, SetAccess=private, GetObservable)
         Status char    = 'unknown';
         LastPos double = NaN;
         TargetPos double = NaN;
-        FocuserType = 'Celestron Focus Motor'; 
     end
         
     properties (SetAccess=public, GetAccess=private)
