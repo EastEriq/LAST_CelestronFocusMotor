@@ -1,6 +1,6 @@
 classdef CelestronFocuser < obs.focuser
     
-    properties
+    properties (SetObservable,GetObservable)
         Pos double =NaN;
     end
     
