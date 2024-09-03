@@ -83,6 +83,7 @@ classdef CelestronFocuser < obs.focuser
                 focus=NaN;
                 F.reportError('could not read focuser %s position',F.Id);
             end
+            F.pushPVvalue(focus);
         end
         
         function set.Pos(F,focus)
@@ -153,6 +154,7 @@ classdef CelestronFocuser < obs.focuser
                 F.reportError(['could not get focuser %s status,',...
                                        ' communication problem?'],F.Id);
             end
+            F.pushPVvalue(s);
         end
         
     end
