@@ -93,6 +93,7 @@ classdef CelestronFocuser < obs.focuser
                                        F.Id,focus,F.Limits);
             else
                 try
+                    F.pushPVvalue(focus);
                     F.LastPos=F.Pos; %this works
                     F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
                     F.LastError=''; %this fails
