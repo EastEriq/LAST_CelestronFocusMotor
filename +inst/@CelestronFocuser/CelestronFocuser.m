@@ -87,7 +87,7 @@ classdef CelestronFocuser < obs.focuser
         end
         
         function set.Pos(F,focus)
-            if isnan(focus) || isempty(focus)
+            if isempty(focus) || isnan(focus)
                 F.reportError('invalid focuser position commanded!')
                 return
             end
