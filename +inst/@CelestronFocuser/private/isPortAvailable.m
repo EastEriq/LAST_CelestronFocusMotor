@@ -13,7 +13,7 @@ function avail=isPortAvailable(F)
         try
             delete(instrfind('Port',F.Port))
         catch
-            F.reportError=(['cannot delete Port object ' F.Port ...
+            F.reportError(['cannot delete Port object ' F.Port ...
                             ' -maybe OS disconnected it?']);
         end
     end
