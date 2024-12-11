@@ -89,6 +89,7 @@ classdef CelestronFocuser < obs.focuser
         function set.Pos(F,focus)
             if isnan(focus) || isempty(focus)
                 F.reportError('invalid focuser position commanded!')
+                return
             end
             % empirically, the moving rate seems to be ~300 steps/sec
             if focus<F.Limits(1) || focus>F.Limits(2)
