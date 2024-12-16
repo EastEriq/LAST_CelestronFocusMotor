@@ -18,6 +18,15 @@ a matter of weak engineering of the communication module and non-immunity to EMI
 easily monitored by `dmesg -wH`; they cause the OS assigning a new `/dev/tty` device each time, are problematic for Matlab as they leave stale serial resources, and in general for stable operation. One may be forced to issue again and again `delete(instrfind)` to release ALL open
 resources and scan again all existing serial devices to find the one the focuser reattached to.
 
+A windows GUI from Celestron exists, and it has controls for three velocity settings, and a backlash value of 0...99.
+There are AUXmsg modes for GOTO_SLOW and GOTO_FAST, and I have seen them working, but I don't know if there is an
+undocumented code for the intermediate velocity.
+
+Also,there are AUXmsg codes for getting and setting positive and negative backlashes, but I'm not sure
+of what is their effect. Maybe they don't apply to the focuser, but tho the NexStar mount motors. Experimenting
+with them I could not conclude if they add sometimes a small jerk of the motor before or after the move,
+or if I was playing with a defective focuser. With the Windows GUI the control seemed to change the acceleration/deceleration rate.
+
 ## other notes on the focuser itself:
 
 - The focuser remembers its last position and its calibration limits at poweroff.
@@ -32,6 +41,7 @@ resources and scan again all existing serial devices to find the one the focuser
   as the value of the upper index. The range limits are then defined, by Celestron choice, to be
   _operating_range_*[1,19]/18. The motor is then moved somewhere mid range.
 - the motor runs at ~400steps/second. 1000 steps are a full turn. Increasing counts mean CCW rotation.
+- there is also a SlowMotion mode. In it the speed is ~80steps/second.
 - The step counter wraps around at 60000 (not 2^16). This is seen when attempting calibration of a
   mechanically disconnected from focus screw.
 - On the RASA telecope, 1 turn equals 1mm. CCW rotation pushes inside the mirror, i.e toward the corrector

@@ -1,7 +1,8 @@
 classdef CelestronFocuser < obs.focuser
     
     properties (SetObservable,GetObservable)
-        Pos double =NaN;
+        Pos double = NaN;
+        SlowMotion logical = false;
     end
     
     properties (GetAccess=public, SetAccess=private)
@@ -19,6 +20,7 @@ classdef CelestronFocuser < obs.focuser
     end
         
     properties (Hidden=true)
+        OwnBacklash double = NaN; % not sure they have an effect; don't use
         Port="";
     end
 
@@ -99,7 +101,11 @@ classdef CelestronFocuser < obs.focuser
                 try
                     F.pushPVvalue(focus);
                     F.LastPos=F.Pos; %this works
-                    F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
+                    if F.SlowMotion
+                        F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_SLOW, F.num2bytes(focus,3));
+                    else
+                        F.query(inst.CelDev.FOCU, inst.AUXcmd.GOTO_FAST, F.num2bytes(focus,3));
+                    end
                     F.LastError=''; %this fails
                     F.TargetPos=focus;
                 catch
@@ -124,6 +130,29 @@ classdef CelestronFocuser < obs.focuser
             catch
                 Limits=[NaN,NaN];
             end
+        end
+        
+        function set.OwnBacklash(F,b)
+            % according to doc, b=0-:-99
+            % dubious what it does
+            if numel(b)==1
+                b=[b,b];
+            end
+            bn=abs(b(1));
+            bp=abs(b(2));
+            F.query(inst.CelDev.FOCU, inst.AUXcmd.SET_NEG_BACKLASH, bn);
+            F.query(inst.CelDev.FOCU, inst.AUXcmd.SET_POS_BACKLASH, bp);
+        end
+        
+        function b=get.OwnBacklash(F)
+            try
+                bn=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_NEG_BACKLASH);
+                bp=F.query(inst.CelDev.FOCU, inst.AUXcmd.GET_POS_BACKLASH);
+                b=[-bn.numdata,bp.numdata];
+            catch
+                b=[NaN,NaN];
+            end
+ 
         end
         
         function s=get.Status(F)
