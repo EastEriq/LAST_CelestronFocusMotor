@@ -27,9 +27,13 @@ function Flag = waitFinish(Focuser,timeout)
         % Focuser.report('.')
     end
     
-    %pause(0.5);
+    if strcmp(Focuser.Status, 'stuck')
+       % be generous here - sometimes it is wrongly reported, and
+       %  disappears spontaneously (?)
+       pause(3);
+    end
     
-    if (strcmp(Focuser.Status, 'idle'))
+    if strcmp(Focuser.Status, 'idle')
         Focuser.report('Focuser %s movement completed\n',Focuser.Id)
         Flag = true;
     else
