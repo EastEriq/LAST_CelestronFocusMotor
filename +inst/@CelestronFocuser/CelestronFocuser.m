@@ -168,17 +168,17 @@ classdef CelestronFocuser < obs.focuser
             %  status
             s='unknown';
             try
-                p1=F.Pos;
-                % a disconected focuser will report empty Pos
-                if ~isempty(p1)
-                    resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.IS_GOTO_OVER);
-                    reached=(resp.bindata==255);
-                    pause(0.1)
-                    if F.Pos~=p1
-                        s='moving';
-                    else
-                        if reached
-                            s='idle';
+                resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.IS_GOTO_OVER);
+                reached=(resp.bindata==255);
+                if reached
+                    s='idle';
+                else
+                    p1=F.Pos;
+                    % a disconected focuser will report empty Pos
+                    if ~isempty(p1)
+                        pause(0.2)
+                        if F.Pos~=p1
+                            s='moving';
                         else
                             s='stuck';
                         end
@@ -187,6 +187,7 @@ classdef CelestronFocuser < obs.focuser
             catch
                 F.reportError(['could not get focuser %s status,',...
                                        ' communication problem?'],F.Id);
+                s='unknown';
             end
             F.pushPVvalue(s);
         end
