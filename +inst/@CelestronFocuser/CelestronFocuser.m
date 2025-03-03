@@ -168,13 +168,13 @@ classdef CelestronFocuser < obs.focuser
             %  status
             s='unknown';
             try
+                p1=F.Pos; % ask it even if we may not need it, so it is pushed
+                % a disconected focuser will report empty Pos
                 resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.IS_GOTO_OVER);
                 reached=(resp.bindata==255);
                 if reached
                     s='idle';
                 else
-                    p1=F.Pos;
-                    % a disconected focuser will report empty Pos
                     if ~isempty(p1)
                         pause(0.2)
                         if F.Pos~=p1
