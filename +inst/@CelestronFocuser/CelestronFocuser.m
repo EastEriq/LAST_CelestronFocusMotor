@@ -95,7 +95,7 @@ classdef CelestronFocuser < obs.focuser
             end
             % empirically, the moving rate seems to be ~300 steps/sec
             if focus<F.Limits(1) || focus>F.Limits(2)
-                F.reportError('Focuser %s commanded to move to %d, out of its range [%d,%d]!',...
+                F.reportError('Focuser %s commanded to move to %.0f, out of its range [%d,%d]!',...
                                        F.Id,focus,F.Limits);
             else
                 try
