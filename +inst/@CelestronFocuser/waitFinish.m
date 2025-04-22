@@ -37,7 +37,7 @@ function Flag = waitFinish(Focuser,timeout)
         Focuser.report('Focuser %s movement completed\n',Focuser.Id)
         Flag = true;
     else
-        Focuser.reportError('A problem has occurred with the focuser. Status: %s\n',...
+        Focuser.reportError('A problem has occurred with the focuser. Status: %s',...
                              Focuser.Status)
     end
 end
