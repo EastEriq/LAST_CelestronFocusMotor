@@ -7,11 +7,17 @@ function avail=isPortAvailable(F)
    
     portlist=serialportlist; % use seriallist in rev<2019 instead
     
-    avail=any(contains(portlist,F.Port));
+    if isempty(portlist) || isempty(F.port)
+        avail=false;
+    else
+        avail=any(contains(portlist,F.Port));
+    end
+
     if ~avail
         F.reportError("Serial "+F.Port+' disappeared from system, closing it')
         try
             delete(instrfind('Port',F.Port))
+            F.Port="";
         catch
             F.reportError(['cannot delete Port object ' F.Port ...
                             ' -maybe OS disconnected it?']);
