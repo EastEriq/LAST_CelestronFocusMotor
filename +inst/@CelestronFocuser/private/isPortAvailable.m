@@ -7,7 +7,7 @@ function avail=isPortAvailable(F)
    
     portlist=serialportlist; % use seriallist in rev<2019 instead
     
-    if isempty(portlist) || isempty(F.port)
+    if isempty(portlist)
         avail=false;
     else
         avail=any(contains(portlist,F.Port));
