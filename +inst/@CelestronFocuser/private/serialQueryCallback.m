@@ -8,7 +8,8 @@ function resp=serialQueryCallback(N)
     cmd=N.SerialCommand.cmd;
     data=N.SerialCommand.data;
     
-    if isa(N.SerialResource,'serial') && strcmp(N.SerialResource.status,'open')
+    if isa(N.SerialResource,'serial') && isvalid(N.SerialResource) && ...
+            strcmp(N.SerialResource.status,'open')
         flushinput(N.SerialResource)
         
         if ~isempty(data)

@@ -14,7 +14,7 @@ function avail=isPortAvailable(F)
     end
 
     if ~avail
-        F.reportError("Serial "+F.Port+' disappeared from system, closing it')
+        F.reportError('Serial %s disappeared from system, closing it',F.Port)
         try
             delete(instrfind('Port',F.Port))
             F.Port="";
