@@ -4,14 +4,18 @@ function resp=serialQueryCallback(N)
 % The result of the query (controller response, or errors) is stored in
 %  N.SerialReply, which is visible in any context
 
+    % void .SerialReply first
+    resp=inst.AUXmsg();
+    N.SerialReply=resp;
+
     dest=N.SerialCommand.dest;
     cmd=N.SerialCommand.cmd;
     data=N.SerialCommand.data;
     
+
     if isa(N.SerialResource,'serial') && isvalid(N.SerialResource) && ...
             strcmp(N.SerialResource.status,'open')
         flushinput(N.SerialResource)
-        
         if ~isempty(data)
             N.send(dest,cmd,data);
         else

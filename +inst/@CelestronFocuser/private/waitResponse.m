@@ -13,10 +13,10 @@
                            [1,F.SerialResource.BytesAvailable],'char')];
                     % parsing is a bit tricky: we we are good to go if we find in
                     % the input [src dest cmd], if two bytes before that is 0x3B,
-                    % and if we have already len+1 other bites of it;
+                    % and if we have already len+1 other bytes of it;
                     % otherwise, we keep growing the input buffer.
-                    % Any other 0x3B not followed by the desired sequence, cause
-                    % the removal of the trailing message.
+                    % Any other 0x3B not followed by the desired sequence,
+                    % causes the removal of the trailing message.
                     % Also, cmd may be the command waited for, if legal,
                     %  or UNRECOGNIZED_COMMAND otherwise
                     pstart=regexp(buf,[';.' uint8([dest inst.CelDev.APPL])...
