@@ -30,7 +30,7 @@
                     end
                 end              
                 if ~received
-                    pause(0.05);
+                    pause(0.002);
                     i=i+1;
                 end
             end
