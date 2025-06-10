@@ -40,10 +40,12 @@ or if I was playing with a defective focuser. With the Windows GUI the control s
   the upper high resistance point. Once these two points are found, the operating range is set
   as the value of the upper index. The range limits are then defined, by Celestron choice, to be
   _operating_range_*[1,19]/18. The motor is then moved somewhere mid range.
-- the motor runs at ~400steps/second. 1000 steps are a full turn. Increasing counts mean CCW rotation.
+- the motor runs at 355.6 steps/second (measured with `testing/turningspeed`). Movement follows an S profile,
+  with ~1 sec to accelerate to full speed and decelerate to stop.
+  1000 steps are a full turn. Increasing counts mean CCW rotation.
 - there is also a SlowMotion mode. In it the speed is ~80steps/second.
-- The step counter wraps around at 60000 (not 2^16). This is seen when attempting calibration of a
-  mechanically disconnected from focus screw.
+- The step counter wraps around at 60000 (not 2^16). This is seen when attempting the calibration of a
+  focuser mechanically disconnected from the focus screw.
 - On the RASA telecope, 1 turn equals 1mm. CCW rotation pushes inside the mirror, i.e toward the corrector
   plate, i.e. it focuses the telescope farther. The total range is seen to be ~35000 steps, i.e.
   the tick limits may result in ~[1500,36500].

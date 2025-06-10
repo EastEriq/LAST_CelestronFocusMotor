@@ -1,4 +1,4 @@
-function Flag = waitFinish(Focuser,timeout)
+function [Flag,elapsed] = waitFinish(Focuser,timeout)
 % wait until the focuser ends moving and returns to idle,
 %  with a timeout in case it gets stuck or offline
 % Result: true if the focuser is finally idle
@@ -6,12 +6,13 @@ function Flag = waitFinish(Focuser,timeout)
         try
             % if the focuser is unreachable, the following would
             %  either error or write a LastError?
-            if ~isnan(F.TargetPos) || isempty(F.TargetPos)
-                timeout=abs(F.Pos-F.TargetPos)/400; % ~ 400 steps/sec
+            if ~isnan(Focuser.TargetPos) || isempty(Focuser.TargetPos)
+                timeout=abs(Focuser.Pos-Focuser.TargetPos)/355; % ~ 355.6 steps/sec
+                timeout=timeout+5; % an extra guard time for deceleration
             else
                 timeout=10;
             end
-            if ~isempty(F.LastError)
+            if ~isempty(Focuser.LastError)
                 timeout=10;
             end
         catch
@@ -32,7 +33,7 @@ function Flag = waitFinish(Focuser,timeout)
        %  disappears spontaneously (?)
        pause(3);
     end
-    
+
     if strcmp(Focuser.Status, 'idle')
         Focuser.report('Focuser %s movement completed\n',Focuser.Id)
         Flag = true;
@@ -40,4 +41,6 @@ function Flag = waitFinish(Focuser,timeout)
         Focuser.reportError('A problem has occurred with the focuser. Status: %s',...
                              Focuser.Status)
     end
+
+    elapsed=(now-t0)*24*3600;
 end
