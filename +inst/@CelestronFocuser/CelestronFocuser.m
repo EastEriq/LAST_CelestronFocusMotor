@@ -182,7 +182,7 @@ classdef CelestronFocuser < obs.focuser
                             s='moving';
                         else
                             s='stuck';
-                            F.reportError('focuser %s stuck: p1=%d, p2=%d',F.id,p1,p2)
+                            F.reportError('focuser %s stuck: p1=%d, p2=%d',F.Id,p1,p2)
                         end
                     end
                 end
