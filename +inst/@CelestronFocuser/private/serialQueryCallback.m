@@ -10,10 +10,6 @@ function resp=serialQueryCallback(N,dest,cmd,data)
         data=N.SerialCommand.data;
     end
 
-    % void .SerialReply first
-    resp=inst.AUXmsg();
-    N.SerialReply=resp;
-
     if isa(N.SerialResource,'serial') && isvalid(N.SerialResource) && ...
             strcmp(N.SerialResource.status,'open')
         flushinput(N.SerialResource)
