@@ -177,10 +177,12 @@ classdef CelestronFocuser < obs.focuser
                 else
                     if ~isempty(p1)
                         pause(0.2)
-                        if F.Pos~=p1
+                        p2=F.Pos;
+                        if p2~=p1
                             s='moving';
                         else
                             s='stuck';
+                            F.reportError('focuser %s stuck: p1=%d, p2=%d',F.id,p1,p2)
                         end
                     end
                 end
