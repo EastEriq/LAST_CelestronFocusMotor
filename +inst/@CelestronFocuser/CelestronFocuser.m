@@ -170,9 +170,7 @@ classdef CelestronFocuser < obs.focuser
             try
                 p1=F.Pos; % ask it even if we may not need it, so it is pushed
                 % a disconected focuser will report empty Pos
-                resp=F.query(inst.CelDev.FOCU, inst.AUXcmd.IS_GOTO_OVER);
-                reached=(resp.bindata==255);
-                if reached
+                if F.reachedTarget
                     s='idle';
                 else
                     if ~isempty(p1)
@@ -181,8 +179,15 @@ classdef CelestronFocuser < obs.focuser
                         if p2~=p1
                             s='moving';
                         else
-                            s='stuck';
-                            F.reportError('focuser %s stuck: p1=%d, p2=%d',F.Id,p1,p2)
+                            % check once more, to avoid false reports while
+                            %  stopping
+                            if F.reachedTarget
+                                s='idle';
+                            else
+                                s='stuck';
+                                F.reportError('focuser %s stuck: p1=%d, p2=%d',...
+                                               F.Id,p1,p2)
+                            end
                         end
                     end
                 end
