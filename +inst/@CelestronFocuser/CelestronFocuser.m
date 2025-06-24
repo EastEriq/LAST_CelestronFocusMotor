@@ -98,6 +98,7 @@ classdef CelestronFocuser < obs.focuser
                 F.reportError('Focuser %s commanded to move to %.0f, out of its range [%d,%d]!',...
                                        F.Id,focus,F.Limits);
             else
+                focus=round(focus);
                 try
                     F.pushPVvalue(focus);
                     F.LastPos=F.Pos; %this works
