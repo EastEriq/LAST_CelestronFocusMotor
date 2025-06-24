@@ -99,6 +99,7 @@ classdef CelestronFocuser < obs.focuser
                                        F.Id,focus,F.Limits);
             else
                 try
+                    focus=round(focus);
                     F.pushPVvalue(focus);
                     F.LastPos=F.Pos; %this works
                     if F.SlowMotion
