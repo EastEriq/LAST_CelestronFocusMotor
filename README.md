@@ -27,7 +27,7 @@ of what is their effect. Maybe they don't apply to the focuser, but tho the NexS
 with them I could not conclude if they add sometimes a small jerk of the motor before or after the move,
 or if I was playing with a defective focuser. With the Windows GUI the control seemed to change the acceleration/deceleration rate.
 
-## other notes on the focuser itself:
+## Notes on the focuser itself:
 
 - The focuser remembers its last position and its calibration limits at poweroff.
 - If the focuser receives a new position command while it is moving, it immediately changes
@@ -46,9 +46,15 @@ or if I was playing with a defective focuser. With the Windows GUI the control s
 - there is also a SlowMotion mode. In it the speed is ~80steps/second.
 - The step counter wraps around at 60000 (not 2^16). This is seen when attempting the calibration of a
   focuser mechanically disconnected from the focus screw.
-- On the RASA telecope, 1 turn equals 1mm. CCW rotation pushes inside the mirror, i.e toward the corrector
-  plate, i.e. it focuses the telescope farther. The total range is seen to be ~35000 steps, i.e.
+- On the RASA telecope, 1 turn equals 0.75mm (we measured the thread of the guiding screw). CCW
+  rotation pushes inside the mirror, i.e toward the corrector
+  plate, i.e. it focuses the telescope farther. This corresponds to increasing tick count.
+  The total range is seen to be ~35000 steps, i.e.
   the tick limits may result in ~[1500,36500].
+- Thermal expansion of the telescope tube plays in in that when the temperature increases, the
+  tube extends, and the mirror has to be pushed in in order to maintain focus, i.e. tick numbers
+  have to be increased. We measured a slope of ~19 ticks/°C, though with differences from one telescope
+  to the next.
 - The focuser is not made for working when stuck. Among the rest the overcurrent probably causes a voltage drop
   also on the communication circuits, which cause USB-serial drops and disconnects.
 - Forcing the motor to turn when powered, using a wrench, causes permanent damage to the gearbox.
