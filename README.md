@@ -42,10 +42,15 @@ or if I was playing with a defective focuser. With the Windows GUI the control s
   _operating_range_*[1,19]/18. The motor is then moved somewhere mid range.
 - the motor runs at 355.6 steps/second (measured with `testing/turningspeed`). Movement follows an S profile,
   with ~1 sec to accelerate to full speed and decelerate to stop.
-  1000 steps are a full turn. Increasing counts mean CCW rotation.
+  1000 steps are a full turn (0r maybe only 960, see below). Increasing counts mean CCW rotation.
 - there is also a SlowMotion mode. In it the speed is ~80steps/second.
 - The step counter wraps around at 60000 (not 2^16). This is seen when attempting the calibration of a
   focuser mechanically disconnected from the focus screw.
+- Internally, the focuser has a small DC motor, likely driven as servo in closed feedback loop. On top
+  of the motor, a slit disk with 45 slots is read by a photodiode.
+  The axis of the motor does one turn for a commanded movement of 3 ticks. The motor drives a
+  gearbox, apparently with a demultiplication ratio of 320. Eight turns of the motor axis
+  move the main 40 teeth cog of one tooth.
 - On the RASA telecope, 1 turn equals 0.75mm (we measured the thread of the guiding screw). CCW
   rotation pushes inside the mirror, i.e toward the corrector
   plate, i.e. it focuses the telescope farther. This corresponds to increasing tick count.
