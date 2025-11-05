@@ -58,8 +58,9 @@ classdef CelestronFocuser < obs.focuser
             %  already in the workspace. It is important to delete, rather
             %  than to recycle, because the timer associated to a destroyed
             %  object will reference an invalid serial resource
-            delete(timerfind('Name','FocuserSerialInquirer'));
-            F.SerialCollector=timer('Name','FocuserSerialInquirer',...
+            timername=[class(F) '.FocuserSerialInquirer.' F.Id];
+            delete(timerfind('Name',timername));
+            F.SerialCollector=timer('Name',timername,...
                         'ExecutionMode','SingleShot','BusyMode','Queue',...
                         'StartDelay',0,'TimerFcn',@(~,~)F.serialQueryCallback);
         end
