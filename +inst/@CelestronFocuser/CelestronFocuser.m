@@ -174,6 +174,11 @@ classdef CelestronFocuser < obs.focuser
                 % a disconected focuser will report empty Pos
                 if F.reachedTarget
                     s='idle';
+                    t=F.TargetPos;
+                    if ~isempty(t) && ~isnan(t) && t~=p1
+                        F.reportError('focuser is idle at %d, but target is %d',...
+                                        p1,t)
+                    end
                 else
                     if ~isempty(p1)
                         pause(0.2)
