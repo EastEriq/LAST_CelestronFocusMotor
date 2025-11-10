@@ -10,6 +10,7 @@ function calibrate(F)
     timeout=270;
     stuckreadings=4;
     lastpos=nan(1,stuckreadings);
+    F.TargetPos=NaN; % previous target is irrelevant if recalibrated
     try
         stage=-1;
         start_t=now; t=0;

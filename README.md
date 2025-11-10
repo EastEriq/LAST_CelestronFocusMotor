@@ -42,7 +42,9 @@ or if I was playing with a defective focuser. With the Windows GUI the control s
   _operating_range_*[1,19]/18. The motor is then moved somewhere mid range.
 - the motor runs at 355.6 steps/second (measured with `testing/turningspeed`). Movement follows an S profile,
   with ~1 sec to accelerate to full speed and decelerate to stop.
-  1000 steps are a full turn (0r maybe only 960, see below). Increasing counts mean CCW rotation.
+  ~1000 steps should be a full turn (I counted 29 full turns for 31930 ticks of one
+  "broken" focuser, almost 32 of another, though
+  none match the demultiplication ratio noted below, 3/320). Increasing counts mean CCW rotation.
 - there is also a SlowMotion mode. In it the speed is ~80steps/second.
 - The step counter wraps around at 60000 (not 2^16). This is seen when attempting the calibration of a
   focuser mechanically disconnected from the focus screw.
