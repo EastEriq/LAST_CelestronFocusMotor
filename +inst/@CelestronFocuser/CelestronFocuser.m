@@ -20,7 +20,8 @@ classdef CelestronFocuser < obs.focuser
     end
         
     properties (Hidden=true)
-        OwnBacklash double = NaN; % not sure they have an effect; don't use
+        OwnBacklash double = [NaN,NaN]; % not sure they have an effect; don't use
+        TargetTolerance = 2; % off-target ticks which we silently tolerate
         Port="";
     end
 
@@ -175,7 +176,7 @@ classdef CelestronFocuser < obs.focuser
                 if F.reachedTarget
                     s='idle';
                     t=F.TargetPos;
-                    if ~isempty(t) && ~isnan(t) && t~=p1
+                    if ~isempty(t) && ~isnan(t) && abs(t-p1)>F.TargetTolerance
                         F.reportError('focuser is idle at %d, but target is %d',...
                                         p1,t)
                     end
