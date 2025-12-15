@@ -171,9 +171,10 @@ classdef CelestronFocuser < obs.focuser
             %  status
             s='unknown';
             try
+                reached=F.reachedTarget; % ask first, to avoid decisions on old Pos
                 p1=F.Pos; % ask it even if we may not need it, so it is pushed
                 % a disconected focuser will report empty Pos
-                if F.reachedTarget
+                if reached
                     s='idle';
                     t=F.TargetPos;
                     if ~isempty(t) && ~isnan(t) && abs(t-p1)>F.TargetTolerance
