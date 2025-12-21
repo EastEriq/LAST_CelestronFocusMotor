@@ -19,7 +19,7 @@ end
 r=b(2,10:i-10)/[b(1,10:i-10);ones(1,i-19)];
 
 plot(b(1,1:i),b(2,1:i),'.-',...
-     b(1,1:i),b(1,1:i)*r(1)+r(2),'--')
+     b(1,1:i),b(1,1:i)*r(1)+r(2),'--','MarkerSize',10)
 grid on
 xlabel('time, s'); ylabel('ticks')
 title(sprintf('fitted slope = %f ticks/sec',r(1)))

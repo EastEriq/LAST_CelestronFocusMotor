@@ -178,8 +178,14 @@ classdef CelestronFocuser < obs.focuser
                     s='idle';
                     t=F.TargetPos;
                     if ~isempty(t) && ~isnan(t) && abs(t-p1)>F.TargetTolerance
-                        F.reportError('focuser is idle at %d, but target is %d',...
-                                        p1,t)
+                        % check a second time, to make really sure that we
+                        %  were not almost there and reached was flagged too
+                        %  early
+                        pause(0.1)
+                        if F.reachedTarget && abs(t-F.Pos)>F.TargetTolerance
+                            F.reportError('focuser is idle at %d, but target is %d',...
+                                p1,t)
+                        end
                     end
                 else
                     if ~isempty(p1)
