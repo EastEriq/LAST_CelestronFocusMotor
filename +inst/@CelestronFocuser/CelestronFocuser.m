@@ -21,6 +21,7 @@ classdef CelestronFocuser < obs.focuser
         
     properties (Hidden=true)
         OwnBacklash double = [NaN,NaN]; % not sure they have an effect; don't use
+        TicksPerTurn double = 1000; % assumed from measurement
         TargetTolerance = 10; % off-target ticks which we silently tolerate
         Port="";
     end
