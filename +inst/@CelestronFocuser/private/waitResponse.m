@@ -34,4 +34,19 @@
                     i=i+1;
                 end
             end
+            % error reporting
+            if ~received
+                F.reportError('no reply received from focuser')
+            else
+                F.reportDebug('%s\n',out.format(out))
+                if ~out.chkok
+                    F.reportError('wrong checksum in focuser reply')
+                end
+                if out.cmd==inst.AUXcmd.UNRECOGNIZED_COMMAND
+                    F.reportError('unrecognized focuser command')
+                end
+                if ~out.good
+                    F.reportError('bad focuser reply')
+                end
+            end
         end

@@ -56,7 +56,7 @@ function F=connect(F,Port)
             %  port we are opening. Probably it is a bug of serial,
             %  which might be resolved by serialport. Anyway, innocuous
             fopen(F.SerialResource);
-            set(F.SerialResource,'BaudRate',19200,'Terminator',{'',10},'Timeout',1);
+            set(F.SerialResource,'BaudRate',921600,'Terminator',{'',10},'Timeout',1);
             % (quirk: write terminator has to be 10 so that 10 in output
             %  binary data is sent as such)
         end
