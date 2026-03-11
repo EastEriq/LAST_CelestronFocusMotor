@@ -11,6 +11,7 @@ function calibrate(F)
     stuckreadings=4;
     lastpos=nan(1,stuckreadings);
     F.TargetPos=NaN; % previous target is irrelevant if recalibrated
+    F.Status='calibrating';
     try
         stage=-1;
         start_t=now; t=0;
@@ -43,4 +44,5 @@ function calibrate(F)
     catch
         F.reportError('Calibration failed at stage %d after %fsec',stage,t);
     end
+    F.Status; % force Status to be reread (and pushed to PV)
 end
