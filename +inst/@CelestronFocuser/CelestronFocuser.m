@@ -186,6 +186,8 @@ classdef CelestronFocuser < obs.focuser
                         if F.reachedTarget && abs(t-F.Pos)>F.TargetTolerance
                             F.reportError('focuser is idle at %d, but target is %d',...
                                 p1,t)
+                            F.reportError('commanding again movement to %d',t)
+                            F.Pos=t;
                         end
                     end
                 else
