@@ -19,7 +19,11 @@ function calibrate(F)
         % update config whether succesful or not: it matters
         %  that the previous calibration may have changed
         F.CalibratedAtJD=celestial.time.julday;
-        F.replaceConfig(F.Config.FileName,'CalibratedAtJD',{F.CalibratedAtJD})
+        try
+            F.replaceConfig(F.Config.FileName,'CalibratedAtJD',{F.CalibratedAtJD})
+        catch
+            F.report('cannot update CalibratedAtJD in focuser config file\n')
+        end
         % polling till completed:
         while (stage~=256) && t < timeout
             pause(1)
