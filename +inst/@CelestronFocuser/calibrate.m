@@ -16,6 +16,10 @@ function calibrate(F)
         stage=-1;
         start_t=now; t=0;
         F.send(inst.CelDev.FOCU,inst.AUXcmd.HS_CALIBRATION_ENABLE,1);
+        % update config whether succesful or not: it matters
+        %  that the previous calibration may have changed
+        F.CalibratedAtJD=celestial.time.julday;
+        F.replaceConfig(F.Config.FileName,'CalibratedAtJD',{F.CalibratedAtJD})
         % polling till completed:
         while (stage~=256) && t < timeout
             pause(1)
